@@ -5,6 +5,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
+  basePath: '/mbti',
+  assetPrefix: '/mbti/',
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.cache = false;

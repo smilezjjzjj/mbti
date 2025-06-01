@@ -21,17 +21,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: 'npm'
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+        
       - name: Install dependencies
         run: npm ci
+        
+      - name: List files before build
+        run: ls -la
+        
       - name: Build
-        run: npm run build
+        run: |
+          npm run build
+          touch out/.nojekyll
+          
+      - name: List files after build
+        run: ls -la out/
+        
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: ./out
 
@@ -44,4 +59,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1 
+        uses: actions/deploy-pages@v2 

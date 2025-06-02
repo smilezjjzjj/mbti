@@ -56,4 +56,4 @@ NEXT_PUBLIC_DEEPSEEK_API_KEY=your_api_key
 
 ## 许可证
 
-MIT 
+MIT # API 配置更新 - 2025年 6月 2日 星期一 18时29分46秒 CST

@@ -34,30 +34,30 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
 
   return (
     <Card className="modern-card border-0 shadow-none">
-      <CardHeader className="text-center pb-6">
-        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+      <CardHeader className="text-center pb-4 sm:pb-6">
+        <CardTitle className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
           MBTI性格解读
         </CardTitle>
-        <CardDescription className="text-gray-600 text-base">
+        <CardDescription className="text-gray-600 text-sm sm:text-base px-2">
           选择或输入你的MBTI类型，获得AI驱动的深度性格分析
         </CardDescription>
       </CardHeader>
       
-      <CardContent className="space-y-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <div className="space-y-3">
             <Label htmlFor="mbti-input" className="text-sm font-medium text-gray-700">
               选择或输入你的MBTI类型
             </Label>
             
-            {/* MBTI类型选择网格 */}
-            <div className="grid grid-cols-4 gap-2 mb-4">
+            {/* MBTI类型选择网格 - 移动端2列，桌面端4列 */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4">
               {MBTI_TYPES.map((type) => (
                 <button
                   key={type}
                   type="button"
                   onClick={() => handleTypeSelect(type)}
-                  className={`p-3 rounded-xl border-2 transition-all duration-200 font-medium ${
+                  className={`p-2 sm:p-3 rounded-xl border-2 transition-all duration-200 font-medium text-sm sm:text-base ${
                     selectedType === type
                       ? 'border-purple-500 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 shadow-md'
                       : 'border-gray-200 bg-white/50 text-gray-600 hover:border-purple-300 hover:bg-purple-50'
@@ -79,7 +79,7 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
                   setSelectedType('');
                 }}
                 placeholder="或手动输入 (如: INTJ)"
-                className="glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 text-center font-medium text-lg tracking-wider"
+                className="glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 text-center font-medium text-base sm:text-lg tracking-wider h-12 sm:h-auto"
                 maxLength={4}
               />
             </div>
@@ -88,7 +88,7 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
           <Button 
             type="submit" 
             disabled={isLoading || (!selectedType && !mbtiType.trim())}
-            className="modern-button w-full py-3 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="modern-button w-full py-3 sm:py-4 text-sm sm:text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed h-12 sm:h-auto"
           >
             {isLoading ? (
               <div className="flex items-center space-x-2">

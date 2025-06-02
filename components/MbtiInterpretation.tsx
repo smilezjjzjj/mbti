@@ -101,14 +101,14 @@ export default function MbtiInterpretation() {
       
       {/* 加载状态 */}
       {interpretationState.loading && (
-        <div className="glass-effect rounded-2xl p-8 text-center mt-8">
-          <div className="space-y-4">
-            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-              <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+        <div className="glass-effect rounded-2xl p-6 sm:p-8 text-center mt-6 sm:mt-8">
+          <div className="space-y-3 sm:space-y-4">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 border-2 sm:border-3 border-white border-t-transparent rounded-full animate-spin"></div>
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-gray-800">AI正在深度分析中...</h3>
-              <p className="text-gray-600">正在为你生成个性化的MBTI解读</p>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800">AI正在深度分析中...</h3>
+              <p className="text-sm sm:text-base text-gray-600">正在为你生成个性化的MBTI解读</p>
             </div>
             <div className="max-w-xs mx-auto">
               {/* 暂时使用简单的进度条替代 */}
@@ -118,7 +118,7 @@ export default function MbtiInterpretation() {
                   style={{ width: `${progress}%` }}
                 ></div>
               </div>
-              <p className="text-sm text-gray-500 mt-2">{progress}%</p>
+              <p className="text-xs sm:text-sm text-gray-500 mt-2">{progress}%</p>
             </div>
           </div>
         </div>
@@ -126,18 +126,18 @@ export default function MbtiInterpretation() {
       
       {/* 错误状态 */}
       {interpretationState.error && (
-        <div className="glass-effect rounded-2xl p-6 text-center border-2 border-red-200 mt-8">
-          <div className="w-12 h-12 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
-            <span className="text-red-600 text-xl">⚠️</span>
+        <div className="glass-effect rounded-2xl p-4 sm:p-6 text-center border-2 border-red-200 mt-6 sm:mt-8">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 bg-red-100 rounded-full flex items-center justify-center">
+            <span className="text-red-600 text-lg sm:text-xl">⚠️</span>
           </div>
-          <h3 className="text-lg font-semibold text-red-800 mb-2">解读生成失败</h3>
-          <p className="text-red-600">{interpretationState.error}</p>
+          <h3 className="text-base sm:text-lg font-semibold text-red-800 mb-2">解读生成失败</h3>
+          <p className="text-sm sm:text-base text-red-600">{interpretationState.error}</p>
         </div>
       )}
       
       {/* 解读结果 */}
       {interpretationState.data && (
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
           <InterpretationResults interpretation={interpretationState.data} />
         </div>
       )}

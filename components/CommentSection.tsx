@@ -142,22 +142,22 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
 
   return (
     <Suspense fallback={<CommentSkeleton />}>
-      <div className="w-full space-y-6">
+      <div className="w-full space-y-4 sm:space-y-6">
         {/* 发表评论区域 */}
-        <div className="glass-effect rounded-2xl p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <Avatar className={`h-12 w-12 ring-3 ring-white/50 ${getAvatarBackground(userNickname || '用户')}`}>
+        <div className="glass-effect rounded-2xl p-4 sm:p-6">
+          <div className="flex items-start gap-3 mb-4 sm:mb-6">
+            <Avatar className={`h-10 w-10 sm:h-12 sm:w-12 ring-2 sm:ring-3 ring-white/50 flex-shrink-0 ${getAvatarBackground(userNickname || '用户')}`}>
               <AvatarImage src={getAvatarUrl(userNickname || '用户')} alt={userNickname || '用户'} />
-              <AvatarFallback className="font-semibold">{(userNickname || '用')[0]}</AvatarFallback>
+              <AvatarFallback className="font-semibold text-sm sm:text-base">{(userNickname || '用')[0]}</AvatarFallback>
             </Avatar>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               {isEditingNickname ? (
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                   <Input
                     value={tempNickname}
                     onChange={(e) => setTempNickname(e.target.value)}
                     placeholder="昵称"
-                    className="glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 w-32"
+                    className="glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 w-full sm:w-32 h-10 text-sm"
                     maxLength={20}
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') {
@@ -165,36 +165,38 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
                       }
                     }}
                   />
-                  <Button
-                    onClick={saveNickname}
-                    disabled={!tempNickname.trim()}
-                    size="sm"
-                    className="modern-button px-3"
-                  >
-                    <CheckIcon className="h-4 w-4" />
-                  </Button>
-                  {userNickname && (
+                  <div className="flex gap-2">
                     <Button
-                      onClick={cancelEditingNickname}
-                      variant="outline"
+                      onClick={saveNickname}
+                      disabled={!tempNickname.trim()}
                       size="sm"
-                      className="px-3"
+                      className="modern-button px-3 h-10 flex-1 sm:flex-none"
                     >
-                      取消
+                      <CheckIcon className="h-4 w-4" />
                     </Button>
-                  )}
+                    {userNickname && (
+                      <Button
+                        onClick={cancelEditingNickname}
+                        variant="outline"
+                        size="sm"
+                        className="px-3 h-10 flex-1 sm:flex-none"
+                      >
+                        取消
+                      </Button>
+                    )}
+                  </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
-                  <div>
-                    <div className="font-semibold text-gray-800">{userNickname}</div>
-                    <div className="text-sm text-gray-600">当前用户</div>
+                <div className="flex items-center justify-between">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-gray-800 text-sm sm:text-base truncate">{userNickname}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">当前用户</div>
                   </div>
                   <Button
                     onClick={startEditingNickname}
                     variant="ghost"
                     size="sm"
-                    className="text-gray-500 hover:text-gray-700 p-2"
+                    className="text-gray-500 hover:text-gray-700 p-2 flex-shrink-0"
                     title="修改昵称"
                   >
                     <EditIcon className="h-4 w-4" />
@@ -204,19 +206,19 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
             </div>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Textarea 
               placeholder={userNickname ? "分享你的MBTI体验和感悟..." : "请先设置昵称再发表评论..."} 
               value={commentText} 
               onChange={(e) => setCommentText(e.target.value)}
-              className="min-h-[120px] glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 resize-none"
+              className="min-h-[100px] sm:min-h-[120px] glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 resize-none text-sm sm:text-base"
               disabled={!userNickname}
             />
             <div className="flex justify-end">
               <Button 
                 onClick={handleSubmitComment} 
                 disabled={!commentText.trim() || !userNickname}
-                className="modern-button disabled:opacity-50 disabled:cursor-not-allowed"
+                className="modern-button disabled:opacity-50 disabled:cursor-not-allowed h-10 sm:h-auto px-4 sm:px-6 text-sm sm:text-base"
               >
                 <MessageCircleIcon className="h-4 w-4 mr-2" />
                 发表评论
@@ -226,39 +228,39 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
         </div>
         
         {/* 评论列表 */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {comments.length === 0 ? (
-            <div className="glass-effect rounded-2xl p-8 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
-                <MessageCircleIcon className="h-8 w-8 text-purple-500" />
+            <div className="glass-effect rounded-2xl p-6 sm:p-8 text-center">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
+                <MessageCircleIcon className="h-6 w-6 sm:h-8 sm:w-8 text-purple-500" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">还没有评论</h3>
-              <p className="text-gray-600">成为第一个分享想法的人吧！</p>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">还没有评论</h3>
+              <p className="text-sm sm:text-base text-gray-600">成为第一个分享想法的人吧！</p>
             </div>
           ) : (
             comments.map((comment, index) => (
               <div 
                 key={comment.id} 
-                className="glass-effect rounded-2xl p-6 hover:bg-white/30 transition-all duration-200 animate-fade-in"
+                className="glass-effect rounded-2xl p-4 sm:p-6 hover:bg-white/30 transition-all duration-200 animate-fade-in"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="flex gap-4">
-                  <Avatar className={`h-12 w-12 ring-2 ring-white/50 ${getAvatarBackground(comment.username)}`}>
+                <div className="flex gap-3 sm:gap-4">
+                  <Avatar className={`h-10 w-10 sm:h-12 sm:w-12 ring-2 ring-white/50 flex-shrink-0 ${getAvatarBackground(comment.username)}`}>
                     <AvatarImage src={getAvatarUrl(comment.username)} alt={comment.username} />
-                    <AvatarFallback className="font-semibold">{comment.username[0]}</AvatarFallback>
+                    <AvatarFallback className="font-semibold text-sm sm:text-base">{comment.username[0]}</AvatarFallback>
                   </Avatar>
                   
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <div className="font-semibold text-gray-800">{comment.username}</div>
-                        <div className="text-sm text-gray-500">{formatDate(comment.timestamp)}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2 sm:mb-3 gap-2">
+                      <div className="min-w-0">
+                        <div className="font-semibold text-gray-800 text-sm sm:text-base truncate">{comment.username}</div>
+                        <div className="text-xs sm:text-sm text-gray-500">{formatDate(comment.timestamp)}</div>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-shrink-0">
                         {comment.mbtiType !== 'general' && (
                           <Badge 
                             variant="outline" 
-                            className="bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 border-purple-200 font-medium"
+                            className="bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 border-purple-200 font-medium text-xs"
                           >
                             {comment.mbtiType}
                           </Badge>
@@ -266,27 +268,27 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
                         {comment.username === userNickname && (
                           <button
                             onClick={() => handleDeleteComment(comment.id)}
-                            className="text-red-500 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200"
+                            className="text-red-500 hover:text-red-700 p-1.5 sm:p-2 rounded-lg hover:bg-red-50 transition-all duration-200"
                             title="删除评论"
                           >
-                            <Trash2Icon size={16} />
+                            <Trash2Icon size={14} className="sm:w-4 sm:h-4" />
                           </button>
                         )}
                       </div>
                     </div>
                     
-                    <p className="text-gray-700 leading-relaxed mb-4 whitespace-pre-wrap">
+                    <p className="text-gray-700 leading-relaxed mb-3 sm:mb-4 whitespace-pre-wrap text-sm sm:text-base">
                       {comment.content}
                     </p>
                     
                     <div className="flex items-center gap-4">
                       <button
                         onClick={() => handleLikeComment(comment.id)}
-                        className="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors text-sm font-medium group"
+                        className="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors text-xs sm:text-sm font-medium group"
                       >
                         <HeartIcon 
-                          size={18} 
-                          className={`transition-all duration-200 group-hover:scale-110 ${
+                          size={16} 
+                          className={`sm:w-[18px] sm:h-[18px] transition-all duration-200 group-hover:scale-110 ${
                             comment.likes > 0 ? 'fill-red-500 text-red-500' : ''
                           }`} 
                         />

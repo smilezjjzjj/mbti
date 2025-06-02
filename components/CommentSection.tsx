@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { HeartIcon, Trash2Icon, MessageCircleIcon, EditIcon, CheckIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { generateNickname, getAvatarUrl, getAvatarBackground } from '@/lib/utils';
+import { getAvatarUrl, getAvatarBackground } from '@/lib/utils';
 
 interface CommentSectionProps {
   mbtiType: string | null;
@@ -86,12 +86,9 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
   // 取消编辑昵称
   const cancelEditingNickname = () => {
     setTempNickname('');
-    setIsEditingNickname(false);
-    // 如果用户没有昵称且取消编辑，生成一个默认昵称
-    if (!userNickname) {
-      const defaultNickname = generateNickname(mbtiType);
-      setUserNickname(defaultNickname);
-      saveUserNickname(defaultNickname);
+    // 如果用户没有昵称，不能取消编辑，必须输入昵称
+    if (userNickname) {
+      setIsEditingNickname(false);
     }
   };
 
@@ -159,8 +156,8 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
                   <Input
                     value={tempNickname}
                     onChange={(e) => setTempNickname(e.target.value)}
-                    placeholder="请输入你的昵称..."
-                    className="glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400"
+                    placeholder="昵称"
+                    className="glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 w-32"
                     maxLength={20}
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') {
@@ -209,10 +206,11 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
           
           <div className="space-y-4">
             <Textarea 
-              placeholder="分享你的MBTI体验和感悟..." 
+              placeholder={userNickname ? "分享你的MBTI体验和感悟..." : "请先设置昵称再发表评论..."} 
               value={commentText} 
               onChange={(e) => setCommentText(e.target.value)}
               className="min-h-[120px] glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 resize-none"
+              disabled={!userNickname}
             />
             <div className="flex justify-end">
               <Button 

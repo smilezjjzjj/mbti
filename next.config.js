@@ -5,8 +5,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
-  basePath: process.env.NODE_ENV === 'production' ? '/mbti' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/mbti/' : '',
   trailingSlash: true,
   webpack: (config, { isServer }) => {
     if (!isServer) {

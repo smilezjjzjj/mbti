@@ -1,6 +1,10 @@
-# MBTI 性格测试解读
+# MBTI-App.Online
 
-一个基于 Next.js 13 App Router 开发的 MBTI 性格测试解读网站。使用 TypeScript、Tailwind CSS、Shadcn UI 构建，提供美观的界面和流畅的用户体验。
+一个基于 Next.js 13 App Router 开发的在线 MBTI 性格测试解读平台。使用 TypeScript、Tailwind CSS、Shadcn UI 构建，提供美观的界面和流畅的用户体验。
+
+## 项目简介
+
+MBTI-App.Online 是一个专业的 MBTI 性格类型解读平台，帮助用户深入了解自己的性格特点，提供个性化的职业发展、人际关系和个人成长建议。
 
 ## 主要功能
 

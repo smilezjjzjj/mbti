@@ -6,8 +6,8 @@ import { DeepseekResponse } from './types';
 function cleanMarkdownSyntax(text: string): string {
   return text
     .replace(/[*#_`]/g, '') // 移除 Markdown 标记
-    .replace(/\n+/g, ' ') // 将多个换行替换为单个空格
-    .replace(/\s+/g, ' ') // 将多个空格替换为单个空格
+    .replace(/\n{3,}/g, '\n\n') // 将多个换行替换为双换行
+    .replace(/[ \t]+/g, ' ') // 将多个空格和制表符替换为单个空格
     .trim(); // 移除首尾空格
 }
 
@@ -255,51 +255,63 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
     // 标点符号规范化处理
     content = normalizePunctuation(content);
     
+    console.log('规范化后内容长度:', content.length);
+    console.log('内容预览:', content.substring(0, 200) + '...');
+    
     // 改进的内容解析逻辑
     let sections: string[] = [];
     
     // 方法1：按照数字编号分割（1. 2. 3.）
-    const numberedSections = content.match(/\d+[.、]\s*[\s\S]*?(?=\d+[.、]|$)/g);
+    const numberedSections = content.match(/\d+[.、]\s*[^]*?(?=\d+[.、]|$)/g);
     if (numberedSections && numberedSections.length >= 3) {
       console.log('使用数字编号分割，找到', numberedSections.length, '个部分');
-      sections = numberedSections.slice(0, 3).map(section => {
-        const cleaned = cleanMarkdownSyntax(section.trim());
-        console.log('编号部分长度:', cleaned.length);
-        return cleaned;
+      sections = numberedSections.slice(0, 3).map((section, index) => {
+        // 移除开头的数字编号
+        const cleaned = section.replace(/^\d+[.、]\s*/, '').trim();
+        const processed = cleanMarkdownSyntax(cleaned);
+        console.log(`编号部分${index + 1}长度:`, processed.length);
+        console.log(`编号部分${index + 1}预览:`, processed.substring(0, 100) + '...');
+        return processed;
       });
     }
     
-    // 方法2：如果没有找到编号，按双换行分割
+    // 方法2：如果没有找到编号，按关键词分割
     if (sections.length < 3) {
-      console.log('数字编号分割失败，尝试双换行分割');
+      console.log('数字编号分割失败，尝试关键词分割');
+      const keywords = ['职业发展深度解析', '人际关系深度剖析', '个人成长全面指南'];
+      
+      for (const keyword of keywords) {
+        // 更精确的关键词匹配
+        const regex = new RegExp(`${keyword}[：:]?[^]*?(?=${keywords.filter(k => k !== keyword).map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')}|$)`, 'i');
+        const match = content.match(regex);
+        if (match) {
+          // 移除关键词标题
+          const cleaned = match[0].replace(new RegExp(`^${keyword}[：:]?\\s*`, 'i'), '').trim();
+          const processed = cleanMarkdownSyntax(cleaned);
+          console.log(`关键词 "${keyword}" 匹配长度:`, processed.length);
+          console.log(`关键词 "${keyword}" 预览:`, processed.substring(0, 100) + '...');
+          sections.push(processed);
+        }
+      }
+    }
+    
+    // 方法3：如果还是不够，按双换行分割
+    if (sections.length < 3) {
+      console.log('关键词分割失败，尝试双换行分割');
       const paragraphs = content
         .split(/\n\s*\n/)
-        .filter(p => p.trim().length > 50)
+        .filter(p => p.trim().length > 100) // 提高最小长度要求
         .slice(0, 3)
-        .map(p => {
-          const cleaned = cleanMarkdownSyntax(p.trim());
-          console.log('段落长度:', cleaned.length);
-          return cleaned;
+        .map((p, index) => {
+          const processed = cleanMarkdownSyntax(p.trim());
+          console.log(`段落${index + 1}长度:`, processed.length);
+          console.log(`段落${index + 1}预览:`, processed.substring(0, 100) + '...');
+          return processed;
         });
       
       if (paragraphs.length >= 3) {
         console.log('双换行分割成功，找到', paragraphs.length, '个段落');
         sections = paragraphs;
-      }
-    }
-    
-    // 方法3：如果还是不够，按关键词分割
-    if (sections.length < 3) {
-      console.log('双换行分割失败，尝试关键词分割');
-      const keywords = ['职业发展', '人际关系', '个人成长'];
-      for (const keyword of keywords) {
-        const regex = new RegExp(`${keyword}[^]*?(?=${keywords.filter(k => k !== keyword).join('|')}|$)`, 'i');
-        const match = content.match(regex);
-        if (match) {
-          const cleaned = cleanMarkdownSyntax(match[0].trim());
-          console.log(`关键词 "${keyword}" 匹配长度:`, cleaned.length);
-          sections.push(cleaned);
-        }
       }
     }
     
@@ -312,18 +324,19 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
         content.substring(0, partLength),
         content.substring(partLength, partLength * 2),
         content.substring(partLength * 2)
-      ].map(part => {
-        const cleaned = cleanMarkdownSyntax(part.trim());
-        console.log('强制分割部分长度:', cleaned.length);
-        return cleaned;
+      ].map((part, index) => {
+        const processed = cleanMarkdownSyntax(part.trim());
+        console.log(`强制分割部分${index + 1}长度:`, processed.length);
+        console.log(`强制分割部分${index + 1}预览:`, processed.substring(0, 100) + '...');
+        return processed;
       });
     }
     
-    // 如果某些部分太短，尝试合并或重新分配
-    const minLength = 100;
+    // 验证内容质量
+    const minLength = 200; // 提高最小长度要求
     const validSections = sections.filter(s => s.length >= minLength);
     
-    if (validSections.length < 3 && content.length > 300) {
+    if (validSections.length < 3 && content.length > 600) {
       console.log('部分内容太短，重新按长度分割');
       const contentLength = content.length;
       const partLength = Math.floor(contentLength / 3);
@@ -331,16 +344,25 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
         content.substring(0, partLength),
         content.substring(partLength, partLength * 2),
         content.substring(partLength * 2)
-      ].map(part => cleanMarkdownSyntax(part.trim()));
+      ].map((part, index) => {
+        const processed = cleanMarkdownSyntax(part.trim());
+        console.log(`重新分割部分${index + 1}长度:`, processed.length);
+        return processed;
+      });
     } else if (validSections.length >= 3) {
       sections = validSections.slice(0, 3);
     }
     
     console.log('最终解析后的段落数量:', sections.length);
     console.log('各段落长度:', sections.map(s => s.length));
-    console.log('段落预览:', sections.map(s => s.substring(0, 50) + '...'));
+    console.log('段落完整性检查:', sections.map((s, i) => ({
+      index: i + 1,
+      length: s.length,
+      startsWithTitle: /^(职业发展|人际关系|个人成长)/.test(s),
+      endsComplete: /[。！？]$/.test(s.trim())
+    })));
     
-    if (sections.length === 0 || sections.every(s => s.length < 50)) {
+    if (sections.length === 0 || sections.every(s => s.length < 100)) {
       throw new Error('解析后的内容为空或过短，请重试');
     }
     
@@ -385,10 +407,10 @@ function normalizePunctuation(text: string): string {
     // 规范化括号
     .replace(/\(/g, '（')
     .replace(/\)/g, '）')
-    // 规范化双引号
-    .replace(/["""]/g, '"')
-    // 规范化单引号
-    .replace(/[''']/g, "'")
+    // 规范化双引号 - 使用Unicode编码避免语法错误
+    .replace(/[\u201C\u201D"]/g, '"')
+    // 规范化单引号 - 使用Unicode编码避免语法错误
+    .replace(/[\u2018\u2019']/g, "'")
     // 移除多余空格
     .replace(/\s+/g, ' ')
     // 修正标点符号前后的空格

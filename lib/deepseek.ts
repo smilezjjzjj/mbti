@@ -376,14 +376,19 @@ function normalizePunctuation(text: string): string {
     .replace(/[?？]/g, '？')
     // 规范化感叹号
     .replace(/[!！]/g, '！')
-    // 规范化破折号
-    .replace(/[-—–]/g, '——')
+    // 规范化破折号 - 修复横杠问题
+    .replace(/[-—–−]/g, '——')
+    .replace(/——+/g, '——') // 确保不会有多个连续的破折号
     // 规范化省略号
     .replace(/…/g, '……')
     .replace(/\.\.\./g, '……')
     // 规范化括号
     .replace(/\(/g, '（')
     .replace(/\)/g, '）')
+    // 规范化双引号
+    .replace(/["""]/g, '"')
+    // 规范化单引号
+    .replace(/[''']/g, "'")
     // 移除多余空格
     .replace(/\s+/g, ' ')
     // 修正标点符号前后的空格

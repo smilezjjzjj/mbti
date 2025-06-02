@@ -12,12 +12,6 @@ export default function Footer() {
             </span>
           </div>
         </div>
-        
-        <div className="mt-4 pt-4 border-t border-white/10 text-center">
-          <p className="text-xs text-gray-500 whitespace-nowrap">
-            MBTI性格解读工具 - 基于人工智能的深度分析，帮助你更好地了解自己的性格特质和潜在优势。
-          </p>
-        </div>
       </div>
     </footer>
   );

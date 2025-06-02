@@ -40,17 +40,36 @@ function getMockInterpretation(mbtiType: string): string[] {
 
 async function fetchWithRetry(url: string, options: RequestInit, retries = 3, delay = 2000): Promise<Response> {
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => {
-      controller.abort();
-    }, 60000); // 增加到60秒超时
+    console.log(`发起API请求 (剩余重试次数: ${retries})`);
     
-    const response = await fetch(url, {
+    // 创建新的 AbortController
+    const controller = new AbortController();
+    let timeoutId: NodeJS.Timeout | null = null;
+    
+    // 设置超时
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(() => {
+        console.log('请求超时，中断请求...');
+        controller.abort();
+        reject(new Error('请求超时'));
+      }, 120000); // 2分钟超时
+    });
+    
+    // 发起请求
+    const fetchPromise = fetch(url, {
       ...options,
       signal: controller.signal
     });
     
-    clearTimeout(timeoutId);
+    // 竞争：请求完成 vs 超时
+    const response = await Promise.race([fetchPromise, timeoutPromise]);
+    
+    // 清除超时
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    
+    console.log('API请求完成，状态码:', response.status);
     
     // 对于特定错误码的处理
     if (response.status === 429) {
@@ -72,12 +91,14 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 3, de
     
     // 改善错误处理
     if (error instanceof Error) {
-      if (error.name === 'AbortError') {
+      if (error.name === 'AbortError' || error.message.includes('请求超时')) {
+        console.log('请求被中断或超时');
         if (retries <= 0) {
           throw new Error('请求超时，请检查网络连接或稍后重试');
         }
       }
       if (error.message.includes('Failed to fetch')) {
+        console.log('网络连接失败');
         if (retries <= 0) {
           throw new Error('网络连接失败，请检查网络设置');
         }
@@ -104,37 +125,59 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
     
     // 检查API密钥是否设置
     if (!DEEPSEEK_CONFIG.apiKey || DEEPSEEK_CONFIG.apiKey.includes('请在.env.local文件中设置')) {
-      console.warn('未设置 Deepseek API 密钥，使用模拟数据');
-      // 模拟API调用延迟，快速模式减少等待时间
-      await new Promise(resolve => setTimeout(resolve, quickMode ? 800 : 1500));
-      return getMockInterpretation(mbtiType);
+      throw new Error('未设置 Deepseek API 密钥，请在 .env.local 文件中设置 NEXT_PUBLIC_DEEPSEEK_API_KEY');
     }
     
     console.log(`使用真实API进行MBTI解读... ${quickMode ? '(快速模式)' : '(标准模式)'}`);
     
     // 根据模式调整prompt和参数
     const systemPrompt = quickMode 
-      ? '你是一位MBTI性格分析师。请用中文提供简洁的MBTI性格类型解读，每个方面200-300字，重点突出核心特点和实用建议。请直接用纯文本表达，不使用特殊符号。'
-      : '你是一位专业的MBTI性格分析师。请用中文提供专业的MBTI性格类型解读，每个方面400-600字，包含具体建议和实用策略。请直接用纯文本表达，不使用特殊符号。';
+      ? '你是一位世界顶级的MBTI性格分析专家，拥有心理学博士学位和20年临床经验。请用中文提供专业而简洁的MBTI性格类型解读，每个方面300-400字，融合最新心理学研究成果和实用建议。请直接用纯文本表达，不使用特殊符号。'
+      : '你是一位世界顶级的MBTI性格分析专家，拥有心理学博士学位和20年临床经验。请用中文提供深度专业的MBTI性格类型解读，每个方面600-800字，融合最新心理学研究成果、认知科学理论和大量实际案例。内容要具有极高的专业水准和实用价值。请直接用纯文本表达，不使用特殊符号。';
     
     const userPrompt = quickMode
-      ? `我的MBTI类型是${mbtiType}。请从以下三个角度提供简洁解读，每个方面200-300字：
+      ? `我的MBTI类型是${mbtiType}。请从以下三个角度提供世界级专业解读，每个方面300-400字，要求内容深度专业、实用性强：
 
-1. 职业发展：适合的职业领域、工作优势、发展建议
-2.人际关系：社交特点、沟通风格、关系建议  
-3. 个人成长：学习特点、成长优势、提升策略
+1. 职业发展深度解析：包括认知优势分析、最适合的职业领域、工作风格特点、职场成功策略、领导力发展路径、职业瓶颈突破方法
 
-请确保内容简洁实用。`
-      : `我的MBTI类型是${mbtiType}。请从以下三个角度提供专业解读，每个方面400-600字：
+2. 人际关系深度剖析：包括社交心理特征、沟通模式分析、友谊建立与维护、亲密关系特点、冲突处理策略、人际影响力提升
 
-1. 职业发展解析：包括适合的职业领域、工作风格优势、职场挑战及应对策略、职业发展建议
+3. 个人成长全面指南：包括认知发展特点、学习风格优化、情绪管理策略、压力应对机制、潜能开发方向、长期发展规划
 
-2. 人际关系分析：包括社交特点、沟通风格、友谊和亲密关系特征、人际改善建议
+请确保内容具有心理学理论支撑，包含具体可操作的建议。`
+      : `我的MBTI类型是${mbtiType}。请从以下三个角度提供世界级专业解读，每个方面600-800字，要求达到顶级心理咨询师的专业水准：
 
-3. 个人成长指南：包括学习特点、成长优势、发展盲区、具体提升策略
+1. 职业发展深度解析：
+- 认知功能优势的职场应用分析
+- 最适合的职业领域和具体岗位推荐
+- 工作风格特点和团队协作模式
+- 职场成功的核心策略和关键能力
+- 领导力发展路径和管理风格
+- 职业瓶颈的识别与突破方法
+- 长期职业规划和转型策略
 
-请确保内容实用、具体、有指导价值。`;
+2. 人际关系深度剖析：
+- 社交心理特征和行为模式分析
+- 沟通风格优势和潜在盲区
+- 友谊建立、维护和深化的策略
+- 亲密关系中的表现特点和需求
+- 冲突处理和问题解决能力
+- 人际影响力的建立和提升
+- 社交网络的构建和维护
 
+3. 个人成长全面指南：
+- 认知发展特点和思维模式优化
+- 个性化学习风格和知识获取策略
+- 情绪管理和心理健康维护
+- 压力应对机制和韧性培养
+- 潜能开发的具体方向和方法
+- 人格完善和自我实现路径
+- 长期发展规划和目标设定策略
+
+请确保内容基于最新心理学研究，包含丰富的实际案例和具体可操作的建议，达到世界顶级心理咨询的专业水准。`;
+
+    console.log('开始API调用...');
+    
     const response = await fetchWithRetry(
       `${DEEPSEEK_CONFIG.baseUrl}/chat/completions`,
       {
@@ -156,7 +199,7 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
             }
           ],
           stream: false,
-          max_tokens: quickMode ? 1500 : 2500, // 快速模式减少token数量
+          max_tokens: quickMode ? 2000 : 4000, // 增加token数量以支持更长内容
           temperature: quickMode ? 0.6 : 0.7, // 快速模式降低创造性
           top_p: 0.9,
           response_format: {
@@ -167,6 +210,8 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
       2 // 最多重试2次
     );
 
+    console.log('API响应状态:', response.status);
+    
     const data = await response.json() as DeepseekResponse;
     
     if (!data.choices || data.choices.length === 0 || !data.choices[0].message.content) {
@@ -174,37 +219,111 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
     }
     
     console.log('API调用成功，解析响应内容...');
+    console.log('原始响应长度:', data.choices[0].message.content.length);
     
     // 解析响应内容，提取解读内容
     const content = data.choices[0].message.content;
     
-    // 按段落分割并选择前三个
-    const paragraphs = content
-      .split('\n\n')
-      .filter((p: string) => p.trim().length > 0)
-      .slice(0, 3)
-      .map((p: string) => cleanMarkdownSyntax(p)); // 清理每个段落中的特殊字符
+    // 改进的内容解析逻辑
+    let sections: string[] = [];
+    
+    // 方法1：按照数字编号分割（1. 2. 3.）
+    const numberedSections = content.match(/\d+[.、]\s*[\s\S]*?(?=\d+[.、]|$)/g);
+    if (numberedSections && numberedSections.length >= 3) {
+      console.log('使用数字编号分割，找到', numberedSections.length, '个部分');
+      sections = numberedSections.slice(0, 3).map(section => {
+        const cleaned = cleanMarkdownSyntax(section.trim());
+        console.log('编号部分长度:', cleaned.length);
+        return cleaned;
+      });
+    }
+    
+    // 方法2：如果没有找到编号，按双换行分割
+    if (sections.length < 3) {
+      console.log('数字编号分割失败，尝试双换行分割');
+      const paragraphs = content
+        .split(/\n\s*\n/)
+        .filter(p => p.trim().length > 50) // 降低最小长度要求
+        .slice(0, 3)
+        .map(p => {
+          const cleaned = cleanMarkdownSyntax(p.trim());
+          console.log('段落长度:', cleaned.length);
+          return cleaned;
+        });
       
-    // 如果段落少于3个，尝试按编号点分割
-    if (paragraphs.length < 3) {
-      const numberedPoints = content
-        .match(/\d+[.、][\s\S]+?(?=\d+[.、]|$)/g) || [];
-      if (numberedPoints.length >= 3) {
-        return numberedPoints
-          .slice(0, 3)
-          .map((point: string) => cleanMarkdownSyntax(point.trim()));
+      if (paragraphs.length >= 3) {
+        console.log('双换行分割成功，找到', paragraphs.length, '个段落');
+        sections = paragraphs;
       }
     }
     
-    return paragraphs.length >= 3 ? paragraphs : content
-      .split('\n')
-      .filter((line: string) => line.trim().length > 0)
-      .slice(0, 3)
-      .map((line: string) => cleanMarkdownSyntax(line));
+    // 方法3：如果还是不够，按关键词分割
+    if (sections.length < 3) {
+      console.log('双换行分割失败，尝试关键词分割');
+      const keywords = ['职业发展', '人际关系', '个人成长'];
+      for (const keyword of keywords) {
+        const regex = new RegExp(`${keyword}[^]*?(?=${keywords.filter(k => k !== keyword).join('|')}|$)`, 'i');
+        const match = content.match(regex);
+        if (match) {
+          const cleaned = cleanMarkdownSyntax(match[0].trim());
+          console.log(`关键词 "${keyword}" 匹配长度:`, cleaned.length);
+          sections.push(cleaned);
+        }
+      }
+    }
+    
+    // 方法4：如果解析失败，返回整个内容分成三部分
+    if (sections.length < 3) {
+      console.log('所有分割方法失败，强制分割为三部分');
+      const contentLength = content.length;
+      const partLength = Math.floor(contentLength / 3);
+      sections = [
+        content.substring(0, partLength),
+        content.substring(partLength, partLength * 2),
+        content.substring(partLength * 2)
+      ].map(part => {
+        const cleaned = cleanMarkdownSyntax(part.trim());
+        console.log('强制分割部分长度:', cleaned.length);
+        return cleaned;
+      });
+    }
+    
+    // 如果某些部分太短，尝试合并或重新分配
+    const minLength = 100;
+    const validSections = sections.filter(s => s.length >= minLength);
+    
+    if (validSections.length < 3 && content.length > 300) {
+      console.log('部分内容太短，重新按长度分割');
+      const contentLength = content.length;
+      const partLength = Math.floor(contentLength / 3);
+      sections = [
+        content.substring(0, partLength),
+        content.substring(partLength, partLength * 2),
+        content.substring(partLength * 2)
+      ].map(part => cleanMarkdownSyntax(part.trim()));
+    } else if (validSections.length >= 3) {
+      sections = validSections.slice(0, 3);
+    }
+    
+    console.log('最终解析后的段落数量:', sections.length);
+    console.log('各段落长度:', sections.map(s => s.length));
+    console.log('段落预览:', sections.map(s => s.substring(0, 50) + '...'));
+    
+    if (sections.length === 0 || sections.every(s => s.length < 50)) {
+      throw new Error('解析后的内容为空或过短，请重试');
+    }
+    
+    return sections.slice(0, 3);
   } catch (error) {
     console.error('Error generating MBTI interpretation with Deepseek:', error);
-    // 如果API调用失败，返回模拟数据作为备选
-    console.warn('API调用失败，使用模拟数据');
-    return getMockInterpretation(mbtiType);
+    console.log('API调用失败的详细信息:', {
+      errorName: error instanceof Error ? error.name : 'Unknown',
+      errorMessage: error instanceof Error ? error.message : String(error),
+      mbtiType: mbtiType,
+      quickMode: quickMode
+    });
+    
+    // 重新抛出错误，不使用模拟数据
+    throw new Error(`MBTI解读生成失败: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

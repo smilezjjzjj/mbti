@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { generateMbtiInterpretationWithDeepseek } from '@/lib/deepseek';
-import { Loader2, User, Briefcase, Heart, TrendingUp, RefreshCw, Lightbulb } from 'lucide-react';
+import { Loader2, User, Briefcase, Heart, TrendingUp, RefreshCw, Lightbulb, ArrowLeft, BookOpen, Target, Users } from 'lucide-react';
 
 interface MbtiInterpretationProps {
   mbtiType: string;
@@ -17,12 +17,19 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
   const [error, setError] = useState<string | null>(null);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('');
+  const [retryCount, setRetryCount] = useState(0);
 
-  const generateInterpretation = async () => {
+  const generateInterpretation = async (isRetry = false) => {
     setLoading(true);
     setError(null);
     setLoadingProgress(0);
-    setLoadingMessage(quickMode ? '正在快速生成解读...' : '正在连接AI服务...');
+    setLoadingMessage(quickMode ? '启动快速解读模式...' : '启动AI深度分析...');
+    
+    if (isRetry) {
+      setRetryCount(prev => prev + 1);
+    } else {
+      setRetryCount(0);
+    }
     
     // 根据模式调整进度更新速度
     const progressInterval = setInterval(() => {
@@ -34,17 +41,17 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
           // 根据进度和模式更新消息
           if (quickMode) {
             if (newProgress < 50) {
-              setLoadingMessage('快速分析中...');
+              setLoadingMessage(isRetry ? '重新连接中...' : '快速分析性格特质...');
             } else if (newProgress < 90) {
-              setLoadingMessage('即将完成...');
+              setLoadingMessage('生成解读报告...');
             }
           } else {
             if (newProgress < 30) {
-              setLoadingMessage('正在分析您的性格类型...');
+              setLoadingMessage(isRetry ? '重新连接AI服务...' : '深度分析性格类型...');
             } else if (newProgress < 60) {
-              setLoadingMessage('AI正在生成个性化解读...');
+              setLoadingMessage('构建个性化解读...');
             } else if (newProgress < 90) {
-              setLoadingMessage('正在整理专业建议...');
+              setLoadingMessage('生成专业建议...');
             }
           }
           
@@ -59,9 +66,28 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
       setLoadingProgress(100);
       setLoadingMessage('解读完成！');
       setInterpretation(result);
+      setRetryCount(0); // 成功后重置重试计数
     } catch (err) {
       console.error('生成解读失败:', err);
-      setError(err instanceof Error ? err.message : '生成解读时发生未知错误');
+      
+      // 智能错误处理 - 不直接显示技术错误信息
+      let friendlyError = '服务暂时繁忙，请稍后重试';
+      
+      if (err instanceof Error) {
+        const errorMessage = err.message.toLowerCase();
+        
+        if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+          friendlyError = '网络连接不稳定';
+        } else if (errorMessage.includes('timeout') || errorMessage.includes('abort')) {
+          friendlyError = '请求超时，服务器响应较慢';
+        } else if (errorMessage.includes('rate limit') || errorMessage.includes('quota')) {
+          friendlyError = '当前访问量较大，请稍后再试';
+        } else if (errorMessage.includes('unauthorized') || errorMessage.includes('api key')) {
+          friendlyError = '服务配置异常，请联系管理员';
+        }
+      }
+      
+      setError(friendlyError);
     } finally {
       clearInterval(progressInterval);
       setLoading(false);
@@ -77,14 +103,40 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
   }, [mbtiType]);
 
   const sectionTitles = [
-    { title: '职业发展深度解析', icon: Briefcase, color: 'text-blue-600' },
-    { title: '人际关系深度剖析', icon: Heart, color: 'text-green-600' },
-    { title: '个人成长全面指南', icon: TrendingUp, color: 'text-purple-600' }
+    { 
+      title: '职业发展深度解析', 
+      icon: Briefcase, 
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
+      borderColor: 'border-blue-200',
+      gradientFrom: 'from-blue-500',
+      gradientTo: 'to-blue-600',
+      description: '探索您的职业优势与发展路径'
+    },
+    { 
+      title: '人际关系深度剖析', 
+      icon: Heart, 
+      color: 'text-rose-600',
+      bgColor: 'bg-rose-50',
+      borderColor: 'border-rose-200',
+      gradientFrom: 'from-rose-500',
+      gradientTo: 'to-pink-600',
+      description: '深入了解您的社交模式与关系建立'
+    },
+    { 
+      title: '个人成长全面指南', 
+      icon: TrendingUp, 
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-50',
+      borderColor: 'border-emerald-200',
+      gradientFrom: 'from-emerald-500',
+      gradientTo: 'to-teal-600',
+      description: '制定专属的成长策略与发展计划'
+    }
   ];
 
   // 为每个部分提供针对性的实用建议
   const getSectionAdvice = (index: number, mbtiType: string) => {
-    // 根据MBTI类型和部分索引提供具体建议
     const adviceData: { [key: string]: string[][] } = {
       'INTJ': [
         // 职业发展建议
@@ -514,218 +566,385 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
 
   if (loading) {
     return (
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardContent className="p-8">
-          <div className="flex flex-col items-center justify-center space-y-6">
-            <div className="relative">
-              <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-8 h-8 bg-blue-100 rounded-full animate-pulse"></div>
-              </div>
-            </div>
-            
-            <div className="text-center space-y-3">
-              <p className="text-lg font-medium text-gray-700">{loadingMessage}</p>
-              <p className="text-sm text-gray-500">
-                {quickMode ? '预计需要10-15秒' : '预计需要15-30秒'}，请稍候
-              </p>
-            </div>
-            
-            {/* 改进的进度条 */}
-            <div className="w-80 max-w-full">
-              <div className="flex justify-between text-xs text-gray-500 mb-2">
-                <span>进度</span>
-                <span>{Math.round(loadingProgress)}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                <div 
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500 ease-out"
-                  style={{width: `${loadingProgress}%`}}
-                >
-                  <div className="h-full bg-white bg-opacity-30 animate-pulse"></div>
+      <div className="w-full max-w-6xl mx-auto">
+        <Card className="border-0 shadow-2xl bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30">
+          <CardContent className="p-12">
+            <div className="flex flex-col items-center justify-center space-y-8">
+              {/* 动画加载器 */}
+              <div className="relative">
+                <div className="w-20 h-20 border-4 border-blue-200 rounded-full animate-spin">
+                  <div className="absolute top-0 left-0 w-20 h-20 border-4 border-transparent border-t-blue-600 rounded-full animate-spin"></div>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Loader2 className="h-8 w-8 text-blue-600 animate-pulse" />
                 </div>
               </div>
+              
+              <div className="text-center space-y-4">
+                <h3 className="text-2xl font-bold text-gray-800">{loadingMessage}</h3>
+                <p className="text-lg text-gray-600">
+                  {quickMode ? '预计需要10-15秒' : '预计需要15-30秒'}，请稍候
+                </p>
+                <p className="text-sm text-gray-500">
+                  正在为您的 <span className="font-semibold text-blue-600">{mbtiType}</span> 类型生成专业解读
+                </p>
+              </div>
+              
+              {/* 改进的进度条 */}
+              <div className="w-96 max-w-full">
+                <div className="flex justify-between text-sm text-gray-600 mb-3">
+                  <span className="font-medium">解读进度</span>
+                  <span className="font-bold">{Math.round(loadingProgress)}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-4 rounded-full transition-all duration-700 ease-out relative"
+                    style={{width: `${loadingProgress}%`}}
+                  >
+                    <div className="absolute inset-0 bg-white bg-opacity-20 animate-pulse"></div>
+                    <div className="absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-white/30 to-transparent"></div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* 提示信息 */}
+              <div className="text-center max-w-lg bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                <div className="flex items-center justify-center mb-2">
+                  <Lightbulb className="h-5 w-5 text-amber-500 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">专业提示</span>
+                </div>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  我们正在运用先进的AI技术，结合心理学理论为您生成个性化的深度解读报告
+                </p>
+              </div>
             </div>
-            
-            {/* 提示信息 */}
-            <div className="text-center max-w-md">
-              <p className="text-xs text-gray-400">
-                💡 小贴士：首次生成可能需要稍长时间，后续会更快
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Card className="w-full max-w-4xl mx-auto border-red-200">
-        <CardContent className="p-8">
-          <div className="text-center space-y-4">
-            <div className="text-red-600 text-lg font-medium">解读生成失败</div>
-            <p className="text-gray-600">{error}</p>
-            <Button 
-              onClick={generateInterpretation}
-              variant="outline"
-              className="mt-4"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              重新生成
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="w-full max-w-4xl mx-auto">
+        <Card className="border-0 shadow-2xl bg-gradient-to-br from-white via-orange-50/30 to-red-50/30">
+          <CardContent className="p-8 sm:p-12">
+            <div className="text-center space-y-8">
+              {/* 友好的图标 */}
+              <div className="relative">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center shadow-lg">
+                  <svg className="w-10 h-10 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                {/* 装饰性光环 */}
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-full blur-xl animate-pulse"></div>
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="text-2xl sm:text-3xl font-bold text-gray-800">
+                  解读服务暂时繁忙
+                </h3>
+                <div className="max-w-lg mx-auto space-y-3">
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    我们的AI解读服务正在处理大量请求，请稍后再试
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    通常几分钟后就会恢复正常，感谢您的耐心等待
+                  </p>
+                  {retryCount > 0 && (
+                    <p className="text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg border border-amber-200">
+                      已重试 {retryCount} 次 {retryCount >= 3 ? '• 建议稍后再试' : ''}
+                    </p>
+                  )}
+                </div>
+              </div>
+              
+              {/* 重试选项 */}
+              <div className="space-y-4">
+                <Button 
+                  onClick={() => generateInterpretation(true)}
+                  disabled={retryCount >= 5}
+                  className={`${
+                    retryCount >= 5 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600'
+                  } text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:transform-none disabled:shadow-lg`}
+                >
+                  <RefreshCw className="w-5 h-5 mr-3" />
+                  {retryCount >= 5 ? '已达重试上限' : '立即重试'}
+                </Button>
+                
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    重新选择类型
+                  </button>
+                  
+                  <button
+                    onClick={() => generateInterpretation(true)}
+                    className="inline-flex items-center px-6 py-3 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md"
+                  >
+                    <Users className="w-4 h-4 mr-2" />
+                    稍后重试
+                  </button>
+                </div>
+              </div>
+              
+              {/* 友好提示 */}
+              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20 max-w-md mx-auto">
+                <div className="flex items-center justify-center mb-3">
+                  <Lightbulb className="h-5 w-5 text-amber-500 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {retryCount >= 3 ? '温馨建议' : '小贴士'}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {retryCount >= 3 
+                    ? '多次重试未成功，建议您稍后再来体验。我们的技术团队正在优化服务，为您提供更稳定的解读体验。'
+                    : retryCount >= 1
+                    ? '如果重试仍然失败，可能是当前访问量较大。建议等待几分钟后再试，或检查网络连接。'
+                    : '如果问题持续存在，可能是网络连接不稳定。建议检查网络后重试，或稍后再来体验我们的专业解读服务。'
+                  }
+                </p>
+              </div>
+              
+              {/* 调试信息（仅在开发环境显示） */}
+              {process.env.NODE_ENV === 'development' && (
+                <details className="text-left max-w-lg mx-auto">
+                  <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">
+                    开发调试信息（点击展开）
+                  </summary>
+                  <div className="mt-2 p-3 bg-gray-100 rounded-lg text-xs text-gray-600 font-mono break-all">
+                    {error}
+                  </div>
+                </details>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   if (interpretation.length === 0) {
     return (
-      <Card className="w-full max-w-4xl mx-auto">
-        <CardContent className="p-8">
-          <div className="text-center">
-            <p className="text-gray-600">暂无解读内容</p>
-            <Button 
-              onClick={generateInterpretation}
-              className="mt-4"
-            >
-              生成解读
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="w-full max-w-4xl mx-auto">
+        <Card className="shadow-lg">
+          <CardContent className="p-8">
+            <div className="text-center space-y-4">
+              <BookOpen className="w-16 h-16 mx-auto text-gray-400" />
+              <p className="text-lg text-gray-600">暂无解读内容</p>
+              <Button 
+                onClick={() => generateInterpretation()}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
+              >
+                开始生成解读
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6 sm:space-y-8">
+    <div className="w-full max-w-7xl mx-auto space-y-8 px-4 sm:px-6 lg:px-8">
       {/* 返回选择按钮 */}
-      <div className="text-center">
+      <div className="flex justify-center">
         <button
           onClick={() => window.location.reload()}
-          className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-colors duration-200"
+          className="group inline-flex items-center px-6 py-3 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md"
         >
-          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
+          <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
           重新选择MBTI类型
         </button>
       </div>
 
       {/* 标题区域 */}
-      <div className="text-center mb-8 sm:mb-12">
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 sm:mb-4">
-          {mbtiType} 性格类型{quickMode ? '快速' : '专业'}解读报告
-        </h2>
-        <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
-          {quickMode 
-            ? '基于MBTI理论的快速性格洞察和核心建议' 
-            : '基于心理学理论和专业分析，为您提供深度的性格洞察和发展建议'
-          }
-        </p>
-        <div className="mt-4 sm:mt-6">
-          <Button 
-            onClick={generateInterpretation}
-            variant="outline"
-            size="sm"
-            className="text-xs sm:text-sm"
-          >
-            <RefreshCw className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-            重新生成解读
-          </Button>
+      <div className="text-center space-y-6">
+        <div className="relative">
+          {/* 背景装饰 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 rounded-3xl blur-3xl"></div>
+          
+          <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 sm:p-12 border border-white/20 shadow-2xl">
+            {/* MBTI类型徽章 */}
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-6 shadow-lg">
+              <span className="text-2xl font-bold text-white">{mbtiType}</span>
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
+              {mbtiType} 性格类型解读报告
+            </h1>
+            
+            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6">
+              <span className="text-sm font-medium text-gray-700">
+                {quickMode ? '🚀 快速模式' : '🎯 专业深度模式'}
+              </span>
+            </div>
+            
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
+              {quickMode 
+                ? '基于MBTI理论的快速性格洞察，为您提供核心建议和发展方向' 
+                : '基于心理学理论和AI深度分析，为您呈现全面的性格洞察和专业发展建议'
+              }
+            </p>
+            
+            <Button 
+              onClick={() => generateInterpretation()}
+              variant="outline"
+              className="border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-50 text-blue-700 font-medium px-6 py-3 rounded-xl transition-all duration-200"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              重新生成解读
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* 解读内容 */}
-      <div className="grid gap-6 sm:gap-8">
+      <div className="space-y-12">
         {interpretation.map((content, index) => {
           const section = sectionTitles[index];
           const Icon = section?.icon || User;
           const paragraphs = formatText(content);
           
           return (
-            <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-l-blue-500">
-              <CardHeader className="pb-4 sm:pb-6">
-                <CardTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl lg:text-2xl">
-                  <div className={`p-2 sm:p-3 rounded-lg bg-gray-50 ${section?.color || 'text-gray-600'}`}>
-                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </div>
-                  <span className="font-bold text-gray-800">
-                    第 {index + 1} 部分
-                  </span>
-                </CardTitle>
-                {section && (
-                  <div className="ml-12 sm:ml-16">
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-2">
-                      {section.title}
-                    </h3>
-                  </div>
-                )}
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="ml-0 sm:ml-4 space-y-4 sm:space-y-6">
-                  {paragraphs.map((paragraph, pIndex) => (
-                    <div key={pIndex} className="relative">
-                      <p className="text-sm sm:text-base leading-relaxed text-gray-700 text-justify indent-8 sm:indent-12">
-                        {paragraph}
-                      </p>
-                      {pIndex < paragraphs.length - 1 && (
-                        <div className="mt-3 sm:mt-4 border-b border-gray-100"></div>
+            <div key={index} className="relative">
+              {/* 背景装饰 */}
+              <div className={`absolute inset-0 bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} opacity-5 rounded-3xl blur-2xl`}></div>
+              
+              <Card className={`relative border-0 shadow-2xl bg-white/90 backdrop-blur-sm hover:shadow-3xl transition-all duration-500 rounded-3xl overflow-hidden`}>
+                {/* 顶部装饰条 */}
+                <div className={`h-2 bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'}`}></div>
+                
+                <CardHeader className="pb-6 pt-8 px-8 sm:px-12">
+                  <div className="flex items-start gap-6">
+                    {/* 图标区域 */}
+                    <div className={`flex-shrink-0 p-4 rounded-2xl ${section?.bgColor || 'bg-gray-50'} ${section?.borderColor || 'border-gray-200'} border-2 shadow-lg`}>
+                      <Icon className={`h-8 w-8 ${section?.color || 'text-gray-600'}`} />
+                    </div>
+                    
+                    {/* 标题区域 */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} text-white text-sm font-bold`}>
+                          {index + 1}
+                        </span>
+                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                          {section?.title || `第 ${index + 1} 部分`}
+                        </h2>
+                      </div>
+                      {section?.description && (
+                        <p className="text-gray-600 text-lg leading-relaxed">
+                          {section.description}
+                        </p>
                       )}
                     </div>
-                  ))}
-                  
-                  {/* 针对性的实用建议与发展策略 */}
-                  <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
-                    <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                      <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500" />
-                      <h4 className="text-sm sm:text-base font-semibold text-gray-800">
-                        实用建议与发展策略
-                      </h4>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                      {getSectionAdvice(index, mbtiType).map((advice, adviceIndex) => (
-                        <div
-                          key={adviceIndex}
-                          className="flex items-center px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium bg-gradient-to-r from-blue-50 to-purple-50 text-gray-700 border border-blue-200 transition-all duration-200 hover:shadow-md hover:from-blue-100 hover:to-purple-100"
-                        >
-                          <span className="mr-2 text-blue-600">•</span>
-                          {advice}
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="px-8 sm:px-12 pb-8">
+                  {/* 主要内容 */}
+                  <div className="space-y-8">
+                    {paragraphs.map((paragraph, pIndex) => (
+                      <div key={pIndex} className="relative">
+                        <div className="prose prose-lg max-w-none">
+                          <p className="text-gray-800 leading-relaxed text-justify text-base sm:text-lg font-normal tracking-wide">
+                            {paragraph}
+                          </p>
                         </div>
-                      ))}
+                        {pIndex < paragraphs.length - 1 && (
+                          <div className="mt-6 flex justify-center">
+                            <div className="w-24 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    
+                    {/* 实用建议区域 */}
+                    <div className="mt-10 pt-8 border-t border-gray-200">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 bg-amber-100 rounded-lg">
+                          <Target className="h-5 w-5 text-amber-600" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">
+                          实用建议与行动指南
+                        </h3>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {getSectionAdvice(index, mbtiType).map((advice, adviceIndex) => (
+                          <div
+                            key={adviceIndex}
+                            className={`group relative overflow-hidden rounded-xl p-4 bg-gradient-to-br ${section?.bgColor || 'bg-gray-50'} border ${section?.borderColor || 'border-gray-200'} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} flex-shrink-0`}></div>
+                              <span className="text-sm sm:text-base font-medium text-gray-800 group-hover:text-gray-900 transition-colors">
+                                {advice}
+                              </span>
+                            </div>
+                            
+                            {/* 悬停效果 */}
+                            <div className={`absolute inset-0 bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           );
         })}
       </div>
 
-      {/* 底部总结 */}
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-none shadow-lg">
-        <CardContent className="p-6 sm:p-8">
-          <div className="text-center space-y-3 sm:space-y-4">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-800">专业建议总结</h3>
-            <p className="text-sm sm:text-base text-gray-700 max-w-3xl mx-auto leading-relaxed">
-              以上解读基于MBTI理论框架和心理学研究，旨在帮助您更好地了解自己的性格特质和发展潜力。
-              请记住，性格类型是一个参考工具，真正的成长来自于持续的自我觉察、学习和实践。
-              建议您将这些洞察与实际生活相结合，制定个性化的发展计划。
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-4 sm:mt-6">
-              <span className="px-3 sm:px-4 py-1 sm:py-2 bg-white rounded-full text-xs sm:text-sm font-medium text-gray-700 shadow-sm">
-                🎯 目标导向
-              </span>
-              <span className="px-3 sm:px-4 py-1 sm:py-2 bg-white rounded-full text-xs sm:text-sm font-medium text-gray-700 shadow-sm">
-                🌱 持续成长
-              </span>
-              <span className="px-3 sm:px-4 py-1 sm:py-2 bg-white rounded-full text-xs sm:text-sm font-medium text-gray-700 shadow-sm">
-                🤝 和谐关系
-              </span>
-              <span className="px-3 sm:px-4 py-1 sm:py-2 bg-white rounded-full text-xs sm:text-sm font-medium text-gray-700 shadow-sm">
-                💡 自我觉察
-              </span>
+      {/* 底部总结卡片 */}
+      <Card className="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 border-0 shadow-2xl rounded-3xl overflow-hidden">
+        <div className="h-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"></div>
+        <CardContent className="p-8 sm:p-12">
+          <div className="text-center space-y-8">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="p-3 bg-white rounded-2xl shadow-lg">
+                <BookOpen className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                专业解读总结
+              </h3>
+            </div>
+            
+            <div className="max-w-4xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-700 leading-relaxed mb-8">
+                以上解读基于<span className="font-semibold text-blue-600">MBTI理论框架</span>和<span className="font-semibold text-purple-600">现代心理学研究</span>，
+                结合<span className="font-semibold text-pink-600">AI深度分析技术</span>，为您提供个性化的成长指导。
+                请将这些洞察与实际生活相结合，制定属于您的发展蓝图。
+              </p>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                {[
+                  { icon: '🎯', label: '目标导向', color: 'from-blue-500 to-blue-600' },
+                  { icon: '🌱', label: '持续成长', color: 'from-green-500 to-emerald-600' },
+                  { icon: '🤝', label: '和谐关系', color: 'from-pink-500 to-rose-600' },
+                  { icon: '💡', label: '自我觉察', color: 'from-purple-500 to-violet-600' }
+                ].map((item, index) => (
+                  <div key={index} className="group">
+                    <div className={`bg-gradient-to-br ${item.color} rounded-2xl p-4 text-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1`}>
+                      <div className="text-2xl mb-2">{item.icon}</div>
+                      <div className="text-white font-medium text-sm">{item.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  💫 <strong>温馨提示：</strong>性格类型是了解自己的工具，而非限制。真正的成长来自于持续的自我探索、学习实践和勇于突破舒适圈的勇气。
+                </p>
+              </div>
             </div>
           </div>
         </CardContent>

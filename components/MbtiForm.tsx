@@ -10,7 +10,7 @@ import { getLastMbtiType } from '@/lib/storage';
 import { CheckIcon } from '@radix-ui/react-icons';
 
 interface MbtiFormProps {
-  onSubmit: (mbtiType: string) => void;
+  onSubmit: (mbtiType: string, quickMode: boolean) => void;
   isLoading: boolean;
 }
 
@@ -18,12 +18,13 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
   const [mbtiType, setMbtiType] = useState('');
   const [selectedType, setSelectedType] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [quickMode, setQuickMode] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const typeToSubmit = selectedType || mbtiType.toUpperCase();
     if (typeToSubmit && MBTI_TYPES.includes(typeToSubmit)) {
-      onSubmit(typeToSubmit);
+      onSubmit(typeToSubmit, quickMode);
     }
   };
 
@@ -83,6 +84,21 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
                 maxLength={4}
               />
             </div>
+
+            {/* 快速模式选项 */}
+            <div className="flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+              <input
+                type="checkbox"
+                id="quick-mode"
+                checked={quickMode}
+                onChange={(e) => setQuickMode(e.target.checked)}
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              />
+              <label htmlFor="quick-mode" className="text-sm text-gray-700 cursor-pointer">
+                <span className="font-medium">快速模式</span>
+                <span className="text-gray-500 ml-1">(10-15秒，简化版解读)</span>
+              </label>
+            </div>
           </div>
           
           <Button 
@@ -93,10 +109,10 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
             {isLoading ? (
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>AI正在分析中...</span>
+                <span>{quickMode ? '快速生成中...' : 'AI正在分析中...'}</span>
               </div>
             ) : (
-              '开始AI解读'
+              quickMode ? '快速AI解读' : '开始AI解读'
             )}
           </Button>
         </form>

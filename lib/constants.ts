@@ -40,8 +40,8 @@ export const COLORS = {
 export const DEEPSEEK_CONFIG = {
   baseUrl: "https://api.siliconflow.cn/v1",
   apiKey: process.env.NEXT_PUBLIC_DEEPSEEK_API_KEY || "请在.env.local文件中设置NEXT_PUBLIC_DEEPSEEK_API_KEY",
-  model: "Qwen/QwQ-32B",
-  maxTokens: 512,
+  model: "deepseek-ai/DeepSeek-V3",
+  maxTokens: 2000,
   temperature: 0.7,
   topP: 0.7,
 };

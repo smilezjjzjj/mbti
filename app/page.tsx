@@ -1,6 +1,20 @@
+'use client';
+
+import { useState } from 'react';
+import MbtiForm from '@/components/MbtiForm';
 import MbtiInterpretation from '@/components/MbtiInterpretation';
 
 export default function Home() {
+  const [selectedMbtiType, setSelectedMbtiType] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [quickMode, setQuickMode] = useState(false);
+
+  const handleMbtiSubmit = async (mbtiType: string, isQuickMode: boolean) => {
+    setQuickMode(isQuickMode);
+    setSelectedMbtiType(mbtiType);
+    setIsLoading(false); // MbtiInterpretation组件会管理自己的加载状态
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -44,10 +58,19 @@ export default function Home() {
         </div>
       </div>
 
-      {/* MBTI Interpretation Component */}
-      <div className="max-w-4xl mx-auto px-2 sm:px-4">
-        <MbtiInterpretation />
-      </div>
+      {/* MBTI Form */}
+      {!selectedMbtiType && (
+        <div className="max-w-2xl mx-auto">
+          <MbtiForm onSubmit={handleMbtiSubmit} isLoading={isLoading} />
+        </div>
+      )}
+
+      {/* MBTI Interpretation */}
+      {selectedMbtiType && (
+        <div className="mt-8 sm:mt-12">
+          <MbtiInterpretation mbtiType={selectedMbtiType} quickMode={quickMode} />
+        </div>
+      )}
     </div>
   );
 }

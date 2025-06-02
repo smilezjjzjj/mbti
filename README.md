@@ -12,6 +12,7 @@ MBTI-App.Online 是一个专业的 MBTI 性格类型解读平台，帮助用户�
 - AI 驱动的个性化分析
 - 实时评论与讨论
 - 响应式设计
+- 自动部署集成
 
 ## 技术栈
 
@@ -20,6 +21,14 @@ MBTI-App.Online 是一个专业的 MBTI 性格类型解读平台，帮助用户�
 - Tailwind CSS
 - Shadcn UI
 - React Server Components
+- Vercel 自动部署
+
+## 部署
+
+本项目已配置 Vercel 自动部署：
+- 推送到 `main` 分支会自动触发生产环境部署
+- 推送到其他分支会创建预览部署
+- 部署状态可在 Vercel Dashboard 中查看
 
 ## 本地开发
 

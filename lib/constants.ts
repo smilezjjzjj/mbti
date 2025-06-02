@@ -47,8 +47,8 @@ export const DEEPSEEK_CONFIG = {
 };
 
 export const LOCAL_STORAGE_KEYS = {
-  lastMbti: 'mbti-interpretation-last-mbti',
-  interpretationHistory: 'mbti-interpretation-history',
+  lastMbti: 'mbti-last-type',
+  interpretationHistory: 'mbti-current-interpretation',
   comments: 'mbti-comments',
   lastUsername: 'mbti-last-username'
 };

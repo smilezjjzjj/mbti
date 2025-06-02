@@ -16,11 +16,15 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'apple-gradient': 'linear-gradient(135deg, #B4B4B4 0%, #FAFAFA 100%)',
         'blue-gradient': 'linear-gradient(135deg, #0077ED 0%, #00A2FD 100%)',
+        'modern-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      borderWidth: {
+        '3': '3px',
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -89,6 +93,8 @@ const config: Config = {
         'apple-lg': '0 10px 20px rgba(0, 0, 0, 0.15)',
         'apple-xl': '0 20px 25px rgba(0, 0, 0, 0.15)',
         'apple-inner': 'inset 0 0 5px rgba(0, 0, 0, 0.05)',
+        'modern': '0 8px 32px 0 rgba(31, 38, 135, 0.2)',
+        'modern-lg': '0 12px 40px 0 rgba(31, 38, 135, 0.3)',
       },
       keyframes: {
         'accordion-down': {
@@ -111,11 +117,27 @@ const config: Config = {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-5px)' },
         },
+        'gradient-shift': {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
+        'fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'scale-in': {
+          '0%': { opacity: '0', transform: 'scale(0.9)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'float': 'float 3s ease-in-out infinite',
+        'gradient-shift': 'gradient-shift 15s ease infinite',
+        'fade-in': 'fade-in 0.6s ease-out',
+        'scale-in': 'scale-in 0.4s ease-out',
       },
     },
   },

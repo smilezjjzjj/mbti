@@ -3,12 +3,12 @@
 import { useState, useEffect, Suspense } from 'react';
 import { Comment } from '@/lib/types';
 import { 
-  getComments, saveComment, deleteComment, likeComment
+  getComments, saveComment, deleteComment, likeComment,
+  getUserNickname, saveUserNickname
 } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { HeartIcon, Trash2Icon } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { HeartIcon, Trash2Icon, MessageCircleIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { generateNickname, getAvatarUrl, getAvatarBackground } from '@/lib/utils';
@@ -21,8 +21,8 @@ interface CommentSectionProps {
 function CommentSkeleton() {
   return (
     <div className="animate-pulse space-y-4">
-      <div className="h-24 bg-gray-200 rounded-lg"></div>
-      <div className="h-32 bg-gray-200 rounded-lg"></div>
+      <div className="glass-effect h-24 rounded-xl"></div>
+      <div className="glass-effect h-32 rounded-xl"></div>
     </div>
   );
 }
@@ -31,7 +31,15 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
-  const [userNickname] = useState(() => generateNickname(mbtiType));
+  const [userNickname, setUserNickname] = useState(() => {
+    // 优先使用存储的昵称，如果没有则生成新昵称
+    const savedNickname = getUserNickname();
+    if (savedNickname) return savedNickname;
+    
+    const newNickname = generateNickname(mbtiType);
+    saveUserNickname(newNickname);
+    return newNickname;
+  });
 
   // 加载评论
   useEffect(() => {
@@ -102,92 +110,113 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
 
   return (
     <Suspense fallback={<CommentSkeleton />}>
-      <div className="w-full max-w-md mx-auto mt-10">
-        <div className="bg-white/90 backdrop-blur-md shadow-apple rounded-xl border border-[#E8E8ED] p-6">
+      <div className="w-full space-y-6">
+        {/* 发表评论区域 */}
+        <div className="glass-effect rounded-2xl p-6">
           <div className="flex items-center gap-3 mb-6">
-            <Avatar className={`h-10 w-10 ring-2 ring-white ${getAvatarBackground(userNickname)}`}>
+            <Avatar className={`h-12 w-12 ring-3 ring-white/50 ${getAvatarBackground(userNickname)}`}>
               <AvatarImage src={getAvatarUrl(userNickname)} alt={userNickname} />
-              <AvatarFallback>{userNickname[0]}</AvatarFallback>
+              <AvatarFallback className="font-semibold">{userNickname[0]}</AvatarFallback>
             </Avatar>
             <div>
-              <div className="font-medium text-[#1D1D1F]">{userNickname}</div>
-              <div className="text-xs text-[#86868B]">当前用户</div>
+              <div className="font-semibold text-gray-800">{userNickname}</div>
+              <div className="text-sm text-gray-600">当前用户</div>
             </div>
           </div>
           
-          <div className="space-y-4 mb-6">
+          <div className="space-y-4">
             <Textarea 
-              placeholder="分享你的看法..." 
+              placeholder="分享你的MBTI体验和感悟..." 
               value={commentText} 
               onChange={(e) => setCommentText(e.target.value)}
-              className="min-h-[100px] focus:ring-2 focus:ring-blue-500 border-[#E8E8ED]"
+              className="min-h-[120px] glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 resize-none"
             />
             <div className="flex justify-end">
               <Button 
                 onClick={handleSubmitComment} 
                 disabled={!commentText.trim()}
-                className="bg-gradient-to-r from-[#0071E3] to-[#40AAFF] hover:from-[#0068D1] hover:to-[#3B9EEB] text-white"
+                className="modern-button disabled:opacity-50 disabled:cursor-not-allowed"
               >
+                <MessageCircleIcon className="h-4 w-4 mr-2" />
                 发表评论
               </Button>
             </div>
           </div>
-          
-          <div className="space-y-4">
-            {comments.length === 0 ? (
-              <div className="text-center py-8 text-[#86868B]">
-                还没有评论，成为第一个评论的人吧！
+        </div>
+        
+        {/* 评论列表 */}
+        <div className="space-y-4">
+          {comments.length === 0 ? (
+            <div className="glass-effect rounded-2xl p-8 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
+                <MessageCircleIcon className="h-8 w-8 text-purple-500" />
               </div>
-            ) : (
-              comments.map(comment => (
-                <Card key={comment.id} className="border border-[#E8E8ED] shadow-sm">
-                  <CardContent className="p-4">
-                    <div className="flex gap-3">
-                      <Avatar className={`h-10 w-10 ring-2 ring-white ${getAvatarBackground(comment.username)}`}>
-                        <AvatarImage src={getAvatarUrl(comment.username)} alt={comment.username} />
-                        <AvatarFallback>{comment.username[0]}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <div className="font-medium text-[#1D1D1F]">{comment.username}</div>
-                            <div className="text-xs text-[#86868B]">{formatDate(comment.timestamp)}</div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {comment.mbtiType !== 'general' && (
-                              <Badge variant="outline" className="bg-[#F5F5F7] text-[#86868B] border-[#E8E8ED]">
-                                {comment.mbtiType}
-                              </Badge>
-                            )}
-                            {comment.username === userNickname && (
-                              <button
-                                onClick={() => handleDeleteComment(comment.id)}
-                                className="text-[#FF3B30] hover:text-[#FF2D55] p-1 rounded-full hover:bg-[#FFF1F0] transition-colors"
-                                title="删除评论"
-                              >
-                                <Trash2Icon size={16} />
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                        <p className="mt-2 text-[#1D1D1F]">{comment.content}</p>
-                        
-                        <div className="flex gap-4 mt-3">
-                          <button
-                            onClick={() => handleLikeComment(comment.id)}
-                            className="flex items-center gap-1 text-[#86868B] hover:text-[#0071E3] transition-colors text-sm"
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">还没有评论</h3>
+              <p className="text-gray-600">成为第一个分享想法的人吧！</p>
+            </div>
+          ) : (
+            comments.map((comment, index) => (
+              <div 
+                key={comment.id} 
+                className="glass-effect rounded-2xl p-6 hover:bg-white/30 transition-all duration-200 animate-fade-in"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="flex gap-4">
+                  <Avatar className={`h-12 w-12 ring-2 ring-white/50 ${getAvatarBackground(comment.username)}`}>
+                    <AvatarImage src={getAvatarUrl(comment.username)} alt={comment.username} />
+                    <AvatarFallback className="font-semibold">{comment.username[0]}</AvatarFallback>
+                  </Avatar>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="font-semibold text-gray-800">{comment.username}</div>
+                        <div className="text-sm text-gray-500">{formatDate(comment.timestamp)}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {comment.mbtiType !== 'general' && (
+                          <Badge 
+                            variant="outline" 
+                            className="bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 border-purple-200 font-medium"
                           >
-                            <HeartIcon size={16} />
-                            <span>{comment.likes}</span>
+                            {comment.mbtiType}
+                          </Badge>
+                        )}
+                        {comment.username === userNickname && (
+                          <button
+                            onClick={() => handleDeleteComment(comment.id)}
+                            className="text-red-500 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200"
+                            title="删除评论"
+                          >
+                            <Trash2Icon size={16} />
                           </button>
-                        </div>
+                        )}
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              ))
-            )}
-          </div>
+                    
+                    <p className="text-gray-700 leading-relaxed mb-4 whitespace-pre-wrap">
+                      {comment.content}
+                    </p>
+                    
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => handleLikeComment(comment.id)}
+                        className="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors text-sm font-medium group"
+                      >
+                        <HeartIcon 
+                          size={18} 
+                          className={`transition-all duration-200 group-hover:scale-110 ${
+                            comment.likes > 0 ? 'fill-red-500 text-red-500' : ''
+                          }`} 
+                        />
+                        <span>{comment.likes}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </Suspense>

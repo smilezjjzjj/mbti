@@ -1,48 +1,112 @@
-# MBTI 性格解读应用
+# MBTI 性格解读工具
 
-基于 Next.js 开发的 MBTI 性格类型解读工具，使用 AI 生成个性化解读。
+一个基于 Next.js 和 AI 的现代化 MBTI 性格解读应用，帮助用户深入了解自己的性格特质。
 
-## 功能特点
+## ✨ 主要功能
 
-- 支持输入或选择 16 种 MBTI 性格类型
-- 从职业发展、人际关系和个人成长三个方面提供解读
-- 支持 OpenRouter API 和 Deepseek API 两种 AI 服务
-- 响应式设计，适配各种设备
+### 🧠 智能性格解读
+- **AI 驱动分析**: 基于 DeepSeek API 的深度性格解读
+- **16 种 MBTI 类型**: 支持所有标准 MBTI 性格类型
+- **多维度分析**: 从性格特质、职业发展、人际关系等多个角度解读
+- **个性化内容**: 为每个用户生成独特的性格分析报告
 
-## 本地开发
+### 🎨 现代化设计
+- **渐变背景**: 动态彩色渐变背景，营造温馨氛围
+- **玻璃态效果**: 毛玻璃质感的卡片和组件，增强视觉层次
+- **流畅动画**: 精心设计的过渡动画和交互反馈
+- **响应式布局**: 完美适配各种设备尺寸
 
-1. 克隆仓库
-```bash
-git clone https://github.com/yourusername/mbti-app.git
-cd mbti-app
-```
+### 💬 社区功能
+- **评论系统**: 用户可以分享MBTI体验和感悟
+- **历史记录**: 本地存储解读历史，方便回顾
+- **随机头像**: 为每个用户生成个性化头像
+- **互动点赞**: 支持对评论进行点赞互动
 
-2. 安装依赖
+## 🚀 快速开始
+
+### 环境要求
+- Node.js 18+
+- npm 或 yarn
+
+### 安装依赖
 ```bash
 npm install
 ```
 
-3. 配置环境变量
-   - 复制 `.env.example` 文件为 `.env.local`
-   - 填入你的 API 密钥:
-     ```
-     NEXT_PUBLIC_OPENROUTER_API_KEY=你的OpenRouter_API_Key
-     NEXT_PUBLIC_DEEPSEEK_API_KEY=你的Deepseek_API_Key
-     ```
+### 环境配置
+创建 `.env.local` 文件：
+```env
+DEEPSEEK_API_KEY=your_deepseek_api_key_here
+```
 
-4. 启动开发服务器
+### 开发运行
 ```bash
 npm run dev
 ```
 
-5. 在浏览器中访问 `http://localhost:3000`
+访问 [http://localhost:3000](http://localhost:3000) 查看应用。
 
-## API 密钥获取
+### 构建部署
+```bash
+npm run build
+npm run export
+```
 
-- OpenRouter API: 访问 [OpenRouter](https://openrouter.ai/) 注册并获取 API 密钥
-- Deepseek API: 访问 [Siliconflow](https://api.siliconflow.cn/) 注册并获取 API 密钥
+## 🎯 使用指南
 
-## 注意事项
+### 获取MBTI类型
+1. 访问 [16Personalities](https://www.16personalities.com/ch) 进行免费测试
+2. 获得你的四字母MBTI类型（如：INTJ、ENFP等）
 
-- API 密钥存储在 `.env.local` 文件中，该文件不应提交到 Git 仓库
-- 确保在部署前设置相应的环境变量 
+### 获取性格解读
+1. 在首页选择或输入你的MBTI类型
+2. 点击"开始AI解读"按钮
+3. 等待AI生成个性化解读内容
+4. 查看多维度的性格分析结果
+
+### 参与社区讨论
+1. 在解读结果页面找到评论区
+2. 分享你的MBTI体验和感悟
+3. 与其他用户交流讨论
+4. 为有价值的评论点赞
+
+## 🛠 技术栈
+- **前端框架**: Next.js 13.5.1 (App Router)
+- **样式系统**: Tailwind CSS + Shadcn UI
+- **UI 组件**: Radix UI
+- **类型安全**: TypeScript
+- **AI 服务**: DeepSeek API
+- **部署平台**: GitHub Pages
+
+## 📱 功能特性
+
+### MBTI 解读流程
+1. 用户输入或选择MBTI类型
+2. 系统调用AI API生成解读
+3. 多维度展示分析结果
+4. 支持复制分享功能
+
+### 用户体验优化
+- 直观的类型选择界面
+- 实时的加载进度显示
+- 优雅的错误处理机制
+- 流畅的动画过渡效果
+
+## 🌟 设计特色
+
+- **温馨配色**: 采用柔和的渐变色彩，营造舒适的阅读环境
+- **现代布局**: 卡片式设计，信息层次清晰
+- **交互友好**: 悬停效果和点击反馈，提升用户体验
+- **无障碍设计**: 支持键盘导航和屏幕阅读器
+
+## 📄 许可证
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request 来改进这个项目！
+
+---
+
+**探索你的内在世界** • 基于AI的MBTI性格深度解读 

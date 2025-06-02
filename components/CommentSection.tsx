@@ -8,7 +8,8 @@ import {
 } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { HeartIcon, Trash2Icon, MessageCircleIcon } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { HeartIcon, Trash2Icon, MessageCircleIcon, EditIcon, CheckIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { generateNickname, getAvatarUrl, getAvatarBackground } from '@/lib/utils';
@@ -31,15 +32,21 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
+  const [tempNickname, setTempNickname] = useState('');
   const [userNickname, setUserNickname] = useState(() => {
-    // 优先使用存储的昵称，如果没有则生成新昵称
+    // 优先使用存储的昵称，如果没有则返回空字符串让用户输入
     const savedNickname = getUserNickname();
-    if (savedNickname) return savedNickname;
-    
-    const newNickname = generateNickname(mbtiType);
-    saveUserNickname(newNickname);
-    return newNickname;
+    return savedNickname || '';
   });
+
+  // 如果没有昵称，自动进入编辑模式
+  useEffect(() => {
+    if (!userNickname) {
+      setIsEditingNickname(true);
+      setTempNickname('');
+    }
+  }, [userNickname]);
 
   // 加载评论
   useEffect(() => {
@@ -60,9 +67,37 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
     loadData();
   }, [mbtiType]);
 
+  // 开始编辑昵称
+  const startEditingNickname = () => {
+    setTempNickname(userNickname);
+    setIsEditingNickname(true);
+  };
+
+  // 保存昵称
+  const saveNickname = () => {
+    const nickname = tempNickname.trim();
+    if (nickname) {
+      setUserNickname(nickname);
+      saveUserNickname(nickname);
+      setIsEditingNickname(false);
+    }
+  };
+
+  // 取消编辑昵称
+  const cancelEditingNickname = () => {
+    setTempNickname('');
+    setIsEditingNickname(false);
+    // 如果用户没有昵称且取消编辑，生成一个默认昵称
+    if (!userNickname) {
+      const defaultNickname = generateNickname(mbtiType);
+      setUserNickname(defaultNickname);
+      saveUserNickname(defaultNickname);
+    }
+  };
+
   // 提交评论
   const handleSubmitComment = () => {
-    if (!commentText.trim()) return;
+    if (!commentText.trim() || !userNickname) return;
     
     const newComment: Comment = {
       id: `comment-${Date.now()}`,
@@ -114,13 +149,61 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
         {/* 发表评论区域 */}
         <div className="glass-effect rounded-2xl p-6">
           <div className="flex items-center gap-3 mb-6">
-            <Avatar className={`h-12 w-12 ring-3 ring-white/50 ${getAvatarBackground(userNickname)}`}>
-              <AvatarImage src={getAvatarUrl(userNickname)} alt={userNickname} />
-              <AvatarFallback className="font-semibold">{userNickname[0]}</AvatarFallback>
+            <Avatar className={`h-12 w-12 ring-3 ring-white/50 ${getAvatarBackground(userNickname || '用户')}`}>
+              <AvatarImage src={getAvatarUrl(userNickname || '用户')} alt={userNickname || '用户'} />
+              <AvatarFallback className="font-semibold">{(userNickname || '用')[0]}</AvatarFallback>
             </Avatar>
-            <div>
-              <div className="font-semibold text-gray-800">{userNickname}</div>
-              <div className="text-sm text-gray-600">当前用户</div>
+            <div className="flex-1">
+              {isEditingNickname ? (
+                <div className="flex items-center gap-2">
+                  <Input
+                    value={tempNickname}
+                    onChange={(e) => setTempNickname(e.target.value)}
+                    placeholder="请输入你的昵称..."
+                    className="glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400"
+                    maxLength={20}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        saveNickname();
+                      }
+                    }}
+                  />
+                  <Button
+                    onClick={saveNickname}
+                    disabled={!tempNickname.trim()}
+                    size="sm"
+                    className="modern-button px-3"
+                  >
+                    <CheckIcon className="h-4 w-4" />
+                  </Button>
+                  {userNickname && (
+                    <Button
+                      onClick={cancelEditingNickname}
+                      variant="outline"
+                      size="sm"
+                      className="px-3"
+                    >
+                      取消
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <div>
+                    <div className="font-semibold text-gray-800">{userNickname}</div>
+                    <div className="text-sm text-gray-600">当前用户</div>
+                  </div>
+                  <Button
+                    onClick={startEditingNickname}
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-500 hover:text-gray-700 p-2"
+                    title="修改昵称"
+                  >
+                    <EditIcon className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
           
@@ -134,7 +217,7 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
             <div className="flex justify-end">
               <Button 
                 onClick={handleSubmitComment} 
-                disabled={!commentText.trim()}
+                disabled={!commentText.trim() || !userNickname}
                 className="modern-button disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <MessageCircleIcon className="h-4 w-4 mr-2" />

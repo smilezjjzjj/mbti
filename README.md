@@ -58,3 +58,4 @@ NEXT_PUBLIC_DEEPSEEK_API_KEY=your_api_key
 
 MIT # API 配置更新 - 2025年 6月 2日 星期一 18时29分46秒 CST
 # 触发重新部署 - 2025年 6月 2日 星期一 18时57分57秒 CST
+# 强制重新部署 API 修复 - 2025年 6月 2日 星期一 19时01分07秒 CST

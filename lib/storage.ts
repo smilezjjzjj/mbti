@@ -100,7 +100,15 @@ export function likeComment(commentId: string): void {
 // 昵称相关功能
 export function getUserNickname(): string | null {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem(LOCAL_STORAGE_KEYS.lastUsername);
+    const nickname = localStorage.getItem(LOCAL_STORAGE_KEYS.lastUsername);
+    
+    // 检查是否是旧的自动生成昵称格式（如"灵感的猫986"），如果是则清除
+    if (nickname && /^.+的.+\d+$/.test(nickname)) {
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.lastUsername);
+      return null;
+    }
+    
+    return nickname;
   }
   return null;
 }

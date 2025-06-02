@@ -6,7 +6,7 @@ import MbtiForm from '@/components/MbtiForm';
 import { InterpretationResults } from '@/components/InterpretationResults';
 import { saveLastMbtiType, saveInterpretation, getInterpretationByMbtiType } from '@/lib/storage';
 import { Interpretation, InterpretationState } from '@/lib/types';
-import { Progress } from '@/components/ui/progress';
+// import { Progress } from '@/components/ui/progress';
 
 export default function MbtiInterpretation() {
   const [interpretationState, setInterpretationState] = useState<InterpretationState>({
@@ -111,10 +111,13 @@ export default function MbtiInterpretation() {
               <p className="text-gray-600">正在为你生成个性化的MBTI解读</p>
             </div>
             <div className="max-w-xs mx-auto">
-              <Progress 
-                value={progress} 
-                className="h-2 bg-white/30" 
-              />
+              {/* 暂时使用简单的进度条替代 */}
+              <div className="w-full bg-white/30 rounded-full h-2">
+                <div 
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
               <p className="text-sm text-gray-500 mt-2">{progress}%</p>
             </div>
           </div>

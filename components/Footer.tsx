@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer className="glass-effect border-t border-white/20 mt-auto">
-      <div className="container mx-auto px-4 py-6">
+      <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-6">
         <div className="flex justify-center items-center">
           <div className="flex items-center space-x-2">
             <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-md flex items-center justify-center">

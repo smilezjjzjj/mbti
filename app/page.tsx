@@ -16,9 +16,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full overflow-x-hidden">
       {/* Hero Section */}
-      <div className="text-center mb-8 sm:mb-12">
+      <div className="text-center mb-8 sm:mb-12 px-1">
         <div className="modern-card max-w-4xl mx-auto p-4 sm:p-8 mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
             探索你的内在世界
@@ -60,14 +60,14 @@ export default function Home() {
 
       {/* MBTI Form */}
       {!selectedMbtiType && (
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto px-1">
           <MbtiForm onSubmit={handleMbtiSubmit} isLoading={isLoading} />
         </div>
       )}
 
       {/* MBTI Interpretation */}
       {selectedMbtiType && (
-        <div className="mt-8 sm:mt-12">
+        <div className="mt-8 sm:mt-12 w-full">
           <MbtiInterpretation mbtiType={selectedMbtiType} quickMode={quickMode} />
         </div>
       )}

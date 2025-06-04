@@ -125,7 +125,7 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
     
     // 检查API密钥是否设置
     if (!DEEPSEEK_CONFIG.apiKey || DEEPSEEK_CONFIG.apiKey.includes('请在.env.local文件中设置')) {
-      throw new Error('未设置 Deepseek API 密钥，请在 .env.local 文件中设置 NEXT_PUBLIC_DEEPSEEK_API_KEY');
+      throw new Error('未设置 API 密钥，请在 .env.local 文件中设置 NEXT_PUBLIC_DEEPSEEK_API_KEY');
     }
     
     console.log(`使用真实API进行MBTI解读... ${quickMode ? '(快速模式)' : '(标准模式)'}`);
@@ -384,39 +384,23 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
 // 新增：标点符号规范化函数
 function normalizePunctuation(text: string): string {
   return text
-    // 规范化句号
+    // 规范化基本标点符号
     .replace(/[.．]/g, '。')
-    // 规范化逗号
     .replace(/[,，]/g, '，')
-    // 规范化顿号
-    .replace(/[、]/g, '、')
-    // 规范化冒号
     .replace(/[:：]/g, '：')
-    // 规范化分号
     .replace(/[;；]/g, '；')
-    // 规范化问号
     .replace(/[?？]/g, '？')
-    // 规范化感叹号
     .replace(/[!！]/g, '！')
-    // 规范化破折号 - 修复横杠问题
     .replace(/[-—–−]/g, '——')
-    .replace(/——+/g, '——') // 确保不会有多个连续的破折号
-    // 规范化省略号
+    .replace(/——+/g, '——')
     .replace(/…/g, '……')
     .replace(/\.\.\./g, '……')
-    // 规范化括号
     .replace(/\(/g, '（')
     .replace(/\)/g, '）')
-    // 规范化双引号 - 使用Unicode编码避免语法错误
-    .replace(/[\u201C\u201D"]/g, '"')
-    // 规范化单引号 - 使用Unicode编码避免语法错误
-    .replace(/[\u2018\u2019']/g, "'")
     // 移除多余空格
     .replace(/\s+/g, ' ')
-    // 修正标点符号前后的空格
     .replace(/\s+([。，、：；？！）])/g, '$1')
     .replace(/([（])\s+/g, '$1')
-    // 确保句子之间有适当的间隔
     .replace(/([。！？])([^。！？\s])/g, '$1 $2')
     .trim();
 }

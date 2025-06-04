@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'MBTI解读 - 探索你的性格类型',
   description: '基于人工智能的MBTI性格类型解读工具，帮助你更好地了解自己',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
 };
 
 export default function RootLayout({
@@ -18,9 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh">
-      <body className={`${inter.className} flex flex-col min-h-screen gradient-bg-soft`}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+      </head>
+      <body className={`${inter.className} flex flex-col min-h-screen gradient-bg-soft overflow-x-hidden`}>
         <Header />
-        <main className="flex-grow container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <main className="flex-grow w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-8 overflow-x-hidden">
           {children}
         </main>
         <Footer />

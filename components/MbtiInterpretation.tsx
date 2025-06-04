@@ -752,12 +752,12 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8 px-4 sm:px-6 lg:px-8">
+    <div className="w-full max-w-6xl mx-auto space-y-8 px-3 sm:px-6 lg:px-8">
       {/* 返回选择按钮 */}
-      <div className="flex justify-center">
+      <div className="flex justify-center px-1">
         <button
           onClick={() => window.location.reload()}
-          className="group inline-flex items-center px-6 py-3 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md"
+          className="group inline-flex items-center px-4 sm:px-6 py-3 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md"
         >
           <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
           重新选择MBTI类型
@@ -765,28 +765,28 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
       </div>
 
       {/* 标题区域 */}
-      <div className="text-center space-y-6">
+      <div className="text-center space-y-6 px-1">
         <div className="relative">
           {/* 背景装饰 */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 rounded-3xl blur-3xl"></div>
           
-          <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 sm:p-12 border border-white/20 shadow-2xl">
+          <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-6 sm:p-8 lg:p-12 border border-white/20 shadow-2xl">
             {/* MBTI类型徽章 */}
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-6 shadow-lg">
-              <span className="text-2xl font-bold text-white">{mbtiType}</span>
+            <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-4 sm:mb-6 shadow-lg">
+              <span className="text-xl sm:text-2xl font-bold text-white">{mbtiType}</span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent px-1">
               {mbtiType} 性格类型解读报告
             </h1>
             
-            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6">
-              <span className="text-sm font-medium text-gray-700">
+            <div className="inline-flex items-center px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-4 sm:mb-6">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">
                 {quickMode ? '🚀 快速模式' : '🎯 专业深度模式'}
               </span>
             </div>
             
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8 px-1">
               {quickMode 
                 ? '基于MBTI理论的快速性格洞察，为您提供核心建议和发展方向' 
                 : '基于心理学理论和AI深度分析，为您呈现全面的性格洞察和专业发展建议'
@@ -796,7 +796,7 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
             <Button 
               onClick={() => generateInterpretation()}
               variant="outline"
-              className="border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-50 text-blue-700 font-medium px-6 py-3 rounded-xl transition-all duration-200"
+              className="border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-50 text-blue-700 font-medium px-4 sm:px-6 py-3 rounded-xl transition-all duration-200"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               重新生成解读
@@ -806,40 +806,40 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
       </div>
 
       {/* 解读内容 */}
-      <div className="space-y-12">
+      <div className="space-y-8 sm:space-y-12">
         {interpretation.map((content, index) => {
           const section = sectionTitles[index];
           const Icon = section?.icon || User;
           const paragraphs = formatText(content);
           
           return (
-            <div key={index} className="relative">
+            <div key={index} className="relative px-1">
               {/* 背景装饰 */}
               <div className={`absolute inset-0 bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} opacity-5 rounded-3xl blur-2xl`}></div>
               
-              <Card className={`relative border-0 shadow-2xl bg-white/90 backdrop-blur-sm hover:shadow-3xl transition-all duration-500 rounded-3xl overflow-hidden`}>
+              <Card className={`relative border-0 shadow-2xl bg-white/90 backdrop-blur-sm hover:shadow-3xl transition-all duration-500 rounded-2xl sm:rounded-3xl overflow-hidden`}>
                 {/* 顶部装饰条 */}
                 <div className={`h-2 bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'}`}></div>
                 
-                <CardHeader className="pb-6 pt-8 px-8 sm:px-12">
-                  <div className="flex items-start gap-6">
+                <CardHeader className="pb-4 sm:pb-6 pt-6 sm:pt-8 px-4 sm:px-6 lg:px-8">
+                  <div className="flex items-start gap-3 sm:gap-6">
                     {/* 图标区域 */}
-                    <div className={`flex-shrink-0 p-4 rounded-2xl ${section?.bgColor || 'bg-gray-50'} ${section?.borderColor || 'border-gray-200'} border-2 shadow-lg`}>
-                      <Icon className={`h-8 w-8 ${section?.color || 'text-gray-600'}`} />
+                    <div className={`flex-shrink-0 p-3 sm:p-4 rounded-xl sm:rounded-2xl ${section?.bgColor || 'bg-gray-50'} ${section?.borderColor || 'border-gray-200'} border-2 shadow-lg`}>
+                      <Icon className={`h-6 w-6 sm:h-8 sm:w-8 ${section?.color || 'text-gray-600'}`} />
                     </div>
                     
                     {/* 标题区域 */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} text-white text-sm font-bold`}>
+                      <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                        <span className={`inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} text-white text-xs sm:text-sm font-bold flex-shrink-0`}>
                           {index + 1}
                         </span>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                        <h2 className="text-lg sm:text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
                           {section?.title || `第 ${index + 1} 部分`}
                         </h2>
                       </div>
                       {section?.description && (
-                        <p className="text-gray-600 text-lg leading-relaxed">
+                        <p className="text-gray-600 text-sm sm:text-base lg:text-lg leading-relaxed">
                           {section.description}
                         </p>
                       )}
@@ -847,44 +847,44 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                   </div>
                 </CardHeader>
                 
-                <CardContent className="px-8 sm:px-12 pb-8">
+                <CardContent className="px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
                   {/* 主要内容 */}
-                  <div className="space-y-8">
+                  <div className="space-y-6 sm:space-y-8">
                     {paragraphs.map((paragraph, pIndex) => (
                       <div key={pIndex} className="relative">
-                        <div className="prose prose-lg max-w-none">
-                          <p className="text-gray-800 leading-relaxed text-justify text-base sm:text-lg font-normal tracking-wide">
+                        <div className="prose prose-sm sm:prose-lg max-w-none">
+                          <p className="text-gray-800 leading-relaxed text-justify text-sm sm:text-base lg:text-lg font-normal tracking-wide">
                             {paragraph}
                           </p>
                         </div>
                         {pIndex < paragraphs.length - 1 && (
-                          <div className="mt-6 flex justify-center">
-                            <div className="w-24 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                          <div className="mt-4 sm:mt-6 flex justify-center">
+                            <div className="w-16 sm:w-24 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
                           </div>
                         )}
                       </div>
                     ))}
                     
                     {/* 实用建议区域 */}
-                    <div className="mt-10 pt-8 border-t border-gray-200">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="p-2 bg-amber-100 rounded-lg">
-                          <Target className="h-5 w-5 text-amber-600" />
+                    <div className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-gray-200">
+                      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                        <div className="p-2 bg-amber-100 rounded-lg flex-shrink-0">
+                          <Target className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600" />
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900">
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-900">
                           实用建议与行动指南
                         </h3>
                       </div>
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-3 sm:gap-4">
                         {getSectionAdvice(index, mbtiType).map((advice, adviceIndex) => (
                           <div
                             key={adviceIndex}
-                            className={`group relative overflow-hidden rounded-xl p-4 bg-gradient-to-br ${section?.bgColor || 'bg-gray-50'} border ${section?.borderColor || 'border-gray-200'} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}
+                            className={`group relative overflow-hidden rounded-lg sm:rounded-xl p-3 sm:p-4 bg-gradient-to-br ${section?.bgColor || 'bg-gray-50'} border ${section?.borderColor || 'border-gray-200'} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}
                           >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2 sm:gap-3">
                               <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} flex-shrink-0`}></div>
-                              <span className="text-sm sm:text-base font-medium text-gray-800 group-hover:text-gray-900 transition-colors">
+                              <span className="text-sm sm:text-base font-medium text-gray-800 group-hover:text-gray-900 transition-colors leading-relaxed">
                                 {advice}
                               </span>
                             </div>
@@ -904,27 +904,27 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
       </div>
 
       {/* 底部总结卡片 */}
-      <Card className="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 border-0 shadow-2xl rounded-3xl overflow-hidden">
+      <Card className="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 border-0 shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden mx-1">
         <div className="h-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"></div>
-        <CardContent className="p-8 sm:p-12">
-          <div className="text-center space-y-8">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="p-3 bg-white rounded-2xl shadow-lg">
-                <BookOpen className="h-8 w-8 text-blue-600" />
+        <CardContent className="p-4 sm:p-8 lg:p-12">
+          <div className="text-center space-y-6 sm:space-y-8">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="p-2 sm:p-3 bg-white rounded-xl sm:rounded-2xl shadow-lg">
+                <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
               </div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
                 专业解读总结
               </h3>
             </div>
             
-            <div className="max-w-4xl mx-auto">
-              <p className="text-lg sm:text-xl text-gray-700 leading-relaxed mb-8">
+            <div className="max-w-4xl mx-auto px-1">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed mb-6 sm:mb-8">
                 以上解读基于<span className="font-semibold text-blue-600">MBTI理论框架</span>和<span className="font-semibold text-purple-600">现代心理学研究</span>，
                 结合<span className="font-semibold text-pink-600">AI深度分析技术</span>，为您提供个性化的成长指导。
                 请将这些洞察与实际生活相结合，制定属于您的发展蓝图。
               </p>
               
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
                 {[
                   { icon: '🎯', label: '目标导向', color: 'from-blue-500 to-blue-600' },
                   { icon: '🌱', label: '持续成长', color: 'from-green-500 to-emerald-600' },
@@ -932,16 +932,16 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                   { icon: '💡', label: '自我觉察', color: 'from-purple-500 to-violet-600' }
                 ].map((item, index) => (
                   <div key={index} className="group">
-                    <div className={`bg-gradient-to-br ${item.color} rounded-2xl p-4 text-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1`}>
-                      <div className="text-2xl mb-2">{item.icon}</div>
-                      <div className="text-white font-medium text-sm">{item.label}</div>
+                    <div className={`bg-gradient-to-br ${item.color} rounded-xl sm:rounded-2xl p-3 sm:p-4 text-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1`}>
+                      <div className="text-lg sm:text-2xl mb-1 sm:mb-2">{item.icon}</div>
+                      <div className="text-white font-medium text-xs sm:text-sm">{item.label}</div>
                     </div>
                   </div>
                 ))}
               </div>
               
-              <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                <p className="text-sm text-gray-600 leading-relaxed">
+              <div className="bg-white/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20">
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   💫 <strong>温馨提示：</strong>性格类型是了解自己的工具，而非限制。真正的成长来自于持续的自我探索、学习实践和勇于突破舒适圈的勇气。
                 </p>
               </div>

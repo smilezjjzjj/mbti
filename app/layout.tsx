@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import GoogleAnalytics from '@/components/GoogleAnalytics';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,8 +20,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh">
+      <head>
+        {/* Google Analytics */}
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-WP31TWS8BG"
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-WP31TWS8BG');
+          `}
+        </Script>
+      </head>
       <body className={`${inter.className} flex flex-col min-h-screen gradient-bg-soft overflow-x-hidden`}>
-        <GoogleAnalytics />
         <Header />
         <main className="flex-grow w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-8 overflow-x-hidden">
           {children}

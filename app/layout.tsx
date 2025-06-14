@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </head>
       <body className={`${inter.className} flex flex-col min-h-screen gradient-bg-soft overflow-x-hidden`}>
+        <GoogleAnalytics />
         <Header />
         <main className="flex-grow w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-8 overflow-x-hidden">
           {children}

@@ -95,7 +95,7 @@ export default function Footer() {
             {/* 版权信息 */}
             <div className="flex items-center space-x-2 mb-4 sm:mb-0">
               <span className="text-sm text-gray-500">
-                © 2024-2025 MBTI性格解读平台. 保留所有权利.
+                © 2025 MBTI性格解读平台. 保留所有权利.
               </span>
             </div>
             

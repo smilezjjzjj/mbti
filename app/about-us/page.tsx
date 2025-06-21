@@ -263,7 +263,7 @@ export default function AboutUs() {
                   <Card className="modern-card">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-end mb-2">
-                        <Badge variant="secondary" className="mr-2">2024年初</Badge>
+                        <Badge variant="secondary" className="mr-2">2025年初</Badge>
                         <Lightbulb className="h-5 w-5 text-yellow-500" />
                       </div>
                       <h3 className="text-lg font-semibold mb-2">项目构思</h3>
@@ -285,7 +285,7 @@ export default function AboutUs() {
                     <CardContent className="p-6">
                       <div className="flex items-center mb-2">
                         <Rocket className="h-5 w-5 text-blue-500 mr-2" />
-                        <Badge variant="secondary">2024年中</Badge>
+                        <Badge variant="secondary">2025年中</Badge>
                       </div>
                       <h3 className="text-lg font-semibold mb-2">技术开发</h3>
                       <p className="text-gray-600 text-sm">
@@ -301,7 +301,7 @@ export default function AboutUs() {
                   <Card className="modern-card">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-end mb-2">
-                        <Badge variant="secondary" className="mr-2">2024年底</Badge>
+                        <Badge variant="secondary" className="mr-2">2025年底</Badge>
                         <Award className="h-5 w-5 text-green-500" />
                       </div>
                       <h3 className="text-lg font-semibold mb-2">正式上线</h3>

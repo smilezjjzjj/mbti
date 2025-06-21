@@ -50,7 +50,7 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 3, de
     const timeoutPromise = new Promise<never>((_, reject) => {
       timeoutId = setTimeout(() => {
         console.log('请求超时，中断请求...');
-        controller.abort();
+      controller.abort();
         reject(new Error('请求超时'));
       }, 120000); // 2分钟超时
     });
@@ -66,7 +66,7 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 3, de
     
     // 清除超时
     if (timeoutId) {
-      clearTimeout(timeoutId);
+    clearTimeout(timeoutId);
     }
     
     console.log('API请求完成，状态码:', response.status);
@@ -205,7 +205,7 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
 请确保内容基于最新心理学研究，包含丰富的实际案例和具体可操作的建议，达到世界顶级心理咨询的专业水准，使用规范的中文标点符号。`;
 
     console.log('开始API调用...');
-    
+
     const response = await fetchWithRetry(
       `${DEEPSEEK_CONFIG.baseUrl}/chat/completions`,
       {
@@ -239,7 +239,7 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
     );
 
     console.log('API响应状态:', response.status);
-    
+
     const data = await response.json() as DeepseekResponse;
     
     if (!data.choices || data.choices.length === 0 || !data.choices[0].message.content) {
@@ -298,10 +298,10 @@ export async function generateMbtiInterpretationWithDeepseek(mbtiType: string, q
     // 方法3：如果还是不够，按双换行分割
     if (sections.length < 3) {
       console.log('关键词分割失败，尝试双换行分割');
-      const paragraphs = content
+    const paragraphs = content
         .split(/\n\s*\n/)
         .filter(p => p.trim().length > 100) // 提高最小长度要求
-        .slice(0, 3)
+      .slice(0, 3)
         .map((p, index) => {
           const processed = cleanMarkdownSyntax(p.trim());
           console.log(`段落${index + 1}长度:`, processed.length);

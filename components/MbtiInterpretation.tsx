@@ -571,43 +571,43 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
           <CardContent className="p-4 sm:p-8 lg:p-12">
             <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-8">
               {/* 动画加载器 */}
-              <div className="relative">
+            <div className="relative">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 border-4 border-blue-200 rounded-full animate-spin">
                   <div className="absolute top-0 left-0 w-16 h-16 sm:w-20 sm:h-20 border-4 border-transparent border-t-blue-600 rounded-full animate-spin"></div>
                 </div>
-                <div className="absolute inset-0 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center">
                   <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 animate-pulse" />
-                </div>
               </div>
-              
+            </div>
+            
               <div className="text-center space-y-3 sm:space-y-4 px-2">
                 <h3 className="text-lg sm:text-2xl font-bold text-gray-800">{loadingMessage}</h3>
                 <p className="text-sm sm:text-lg text-gray-600">
-                  {quickMode ? '预计需要10-15秒' : '预计需要15-30秒'}，请稍候
-                </p>
+                {quickMode ? '预计需要10-15秒' : '预计需要15-30秒'}，请稍候
+              </p>
                 <p className="text-xs sm:text-sm text-gray-500">
                   正在为您的 <span className="font-semibold text-blue-600">{mbtiType}</span> 类型生成专业解读
                 </p>
-              </div>
-              
-              {/* 改进的进度条 */}
+            </div>
+            
+            {/* 改进的进度条 */}
               <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg px-2">
                 <div className="flex justify-between text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">
                   <span className="font-medium">解读进度</span>
                   <span className="font-bold">{Math.round(loadingProgress)}%</span>
-                </div>
+              </div>
                 <div className="w-full bg-gray-200 rounded-full h-3 sm:h-4 overflow-hidden shadow-inner">
-                  <div 
+                <div 
                     className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-3 sm:h-4 rounded-full transition-all duration-700 ease-out relative"
-                    style={{width: `${loadingProgress}%`}}
-                  >
+                  style={{width: `${loadingProgress}%`}}
+                >
                     <div className="absolute inset-0 bg-white bg-opacity-20 animate-pulse"></div>
                     <div className="absolute right-0 top-0 h-full w-6 sm:w-8 bg-gradient-to-l from-white/30 to-transparent"></div>
-                  </div>
                 </div>
               </div>
-              
-              {/* 提示信息 */}
+            </div>
+            
+            {/* 提示信息 */}
               <div className="text-center max-w-xs sm:max-w-lg bg-white/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20 mx-2">
                 <div className="flex items-center justify-center mb-2">
                   <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 mr-2" />
@@ -615,11 +615,11 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                 </div>
                 <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   我们正在运用先进的AI技术，结合心理学理论为您生成个性化的深度解读报告
-                </p>
-              </div>
+              </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </CardContent>
+      </Card>
       </div>
     );
   }
@@ -662,7 +662,7 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
               
               {/* 重试选项 */}
               <div className="space-y-3 sm:space-y-4 px-2">
-                <Button 
+            <Button 
                   onClick={() => generateInterpretation(true)}
                   disabled={retryCount >= 5}
                   className={`${
@@ -670,10 +670,10 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                       ? 'bg-gray-400 cursor-not-allowed' 
                       : 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600'
                   } text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:transform-none disabled:shadow-lg text-sm sm:text-base`}
-                >
+            >
                   <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
                   {retryCount >= 5 ? '已达重试上限' : '立即重试'}
-                </Button>
+            </Button>
                 
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
                   <button
@@ -723,9 +723,9 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                   </div>
                 </details>
               )}
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+        </CardContent>
+      </Card>
       </div>
     );
   }
@@ -738,15 +738,15 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
             <div className="text-center space-y-4">
               <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-gray-400" />
               <p className="text-base sm:text-lg text-gray-600">暂无解读内容</p>
-              <Button 
+            <Button 
                 onClick={() => generateInterpretation()}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base"
-              >
+            >
                 开始生成解读
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
       </div>
     );
   }
@@ -787,20 +787,20 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
             </div>
             
             <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-4 sm:mb-6 lg:mb-8 px-1">
-              {quickMode 
+          {quickMode 
                 ? '基于MBTI理论的快速性格洞察，为您提供核心建议和发展方向' 
                 : '基于心理学理论和AI深度分析，为您呈现全面的性格洞察和专业发展建议'
-              }
-            </p>
+          }
+        </p>
             
-            <Button 
+          <Button 
               onClick={() => generateInterpretation()}
-              variant="outline"
+            variant="outline"
               className="border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-50 text-blue-700 font-medium px-4 sm:px-6 py-3 rounded-xl transition-all duration-200"
-            >
+          >
               <RefreshCw className="w-4 h-4 mr-2" />
-              重新生成解读
-            </Button>
+            重新生成解读
+          </Button>
           </div>
         </div>
       </div>
@@ -826,14 +826,14 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                     {/* 图标区域 */}
                     <div className={`flex-shrink-0 p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl lg:rounded-2xl ${section?.bgColor || 'bg-gray-50'} ${section?.borderColor || 'border-gray-200'} border border-2 shadow-lg`}>
                       <Icon className={`h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 ${section?.color || 'text-gray-600'}`} />
-                    </div>
+                  </div>
                     
                     {/* 标题区域 */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
                         <span className={`inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-full bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} text-white text-xs sm:text-sm lg:text-base font-bold flex-shrink-0`}>
                           {index + 1}
-                        </span>
+                  </span>
                         <h2 className="text-base sm:text-lg lg:text-2xl xl:text-3xl font-bold text-gray-900 leading-tight">
                           {section?.title || `第 ${index + 1} 部分`}
                         </h2>
@@ -845,26 +845,26 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                       )}
                     </div>
                   </div>
-                </CardHeader>
+              </CardHeader>
                 
                 <CardContent className="px-3 sm:px-4 lg:px-6 xl:px-8 pb-4 sm:pb-6 lg:pb-8">
                   {/* 主要内容 */}
                   <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-                    {paragraphs.map((paragraph, pIndex) => (
-                      <div key={pIndex} className="relative">
+                  {paragraphs.map((paragraph, pIndex) => (
+                    <div key={pIndex} className="relative">
                         <div className="prose prose-sm sm:prose-base lg:prose-lg max-w-none">
                           <p className="text-gray-800 leading-relaxed text-justify text-xs sm:text-sm lg:text-base xl:text-lg font-normal tracking-wide">
-                            {paragraph}
-                          </p>
+                        {paragraph}
+                      </p>
                         </div>
-                        {pIndex < paragraphs.length - 1 && (
+                      {pIndex < paragraphs.length - 1 && (
                           <div className="mt-3 sm:mt-4 lg:mt-6 flex justify-center">
                             <div className="w-12 sm:w-16 lg:w-24 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
                           </div>
-                        )}
-                      </div>
-                    ))}
-                    
+                      )}
+                    </div>
+                  ))}
+                  
                     {/* 实用建议区域 */}
                     <div className="mt-6 sm:mt-8 lg:mt-10 pt-4 sm:pt-6 lg:pt-8 border-t border-gray-200">
                       <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 lg:mb-6">
@@ -874,30 +874,30 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                         <h3 className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold text-gray-900">
                           实用建议与行动指南
                         </h3>
-                      </div>
+                    </div>
                       
                       <div className="grid grid-cols-1 gap-2 sm:gap-3 lg:gap-4">
-                        {getSectionAdvice(index, mbtiType).map((advice, adviceIndex) => (
-                          <div
-                            key={adviceIndex}
+                      {getSectionAdvice(index, mbtiType).map((advice, adviceIndex) => (
+                        <div
+                          key={adviceIndex}
                             className={`group relative overflow-hidden rounded-lg sm:rounded-xl p-2.5 sm:p-3 lg:p-4 bg-gradient-to-br ${section?.bgColor || 'bg-gray-50'} border ${section?.borderColor || 'border-gray-200'} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}
-                          >
+                        >
                             <div className="flex items-center gap-2 sm:gap-3">
                               <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} flex-shrink-0`}></div>
                               <span className="text-xs sm:text-sm lg:text-base font-medium text-gray-800 group-hover:text-gray-900 transition-colors leading-relaxed">
-                                {advice}
+                          {advice}
                               </span>
                             </div>
                             
                             {/* 悬停效果 */}
                             <div className={`absolute inset-0 bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
-                          </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </CardContent>
+            </Card>
             </div>
           );
         })}
@@ -922,7 +922,7 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                 以上解读基于<span className="font-semibold text-blue-600">MBTI理论框架</span>和<span className="font-semibold text-purple-600">现代心理学研究</span>，
                 结合<span className="font-semibold text-pink-600">AI深度分析技术</span>，为您提供个性化的成长指导。
                 请将这些洞察与实际生活相结合，制定属于您的发展蓝图。
-              </p>
+            </p>
               
               <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-6 lg:mb-8">
                 {[

@@ -1,7 +1,20 @@
+'use client';
+
 import Link from 'next/link';
-import { EnvelopeClosedIcon } from '@radix-ui/react-icons';
+import { EnvelopeClosedIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <header className="glass-effect sticky top-0 z-50 border-b border-white/20">
       <div className="w-full max-w-7xl mx-auto px-1 sm:px-4 lg:px-6">
@@ -17,22 +30,72 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Navigation */}
-          <nav className="flex items-center space-x-1 sm:space-x-6 flex-shrink-0">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6 flex-shrink-0">
             <Link 
               href="/about" 
-              className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-xs sm:text-base whitespace-nowrap"
+              className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-base whitespace-nowrap"
             >
               关于MBTI
             </Link>
+            <Link 
+              href="/about-us" 
+              className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-base whitespace-nowrap"
+            >
+              关于我们
+            </Link>
             <a 
               href="mailto:smilezjjzjj@126.com"
-              className="flex items-center space-x-1 text-gray-700 hover:text-purple-600 transition-colors font-medium text-xs sm:text-base whitespace-nowrap"
+              className="flex items-center space-x-1 text-gray-700 hover:text-purple-600 transition-colors font-medium text-base whitespace-nowrap"
             >
-              <EnvelopeClosedIcon className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+              <EnvelopeClosedIcon className="h-4 w-4 flex-shrink-0" />
               <span>联系我们</span>
             </a>
           </nav>
+
+          {/* Mobile Navigation */}
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                  <HamburgerMenuIcon className="h-4 w-4" />
+                  <span className="sr-only">打开菜单</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link href="/about" className="w-full">
+                    关于MBTI
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/about-us" className="w-full">
+                    关于我们
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/privacy" className="w-full">
+                    隐私政策
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/terms" className="w-full">
+                    服务条款
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <a href="mailto:smilezjjzjj@126.com" className="w-full">
+                    <div className="flex items-center">
+                      <EnvelopeClosedIcon className="h-4 w-4 mr-2" />
+                      联系我们
+                    </div>
+                  </a>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
     </header>

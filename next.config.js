@@ -6,6 +6,7 @@ const nextConfig = {
   },
   images: { unoptimized: true },
   trailingSlash: true,
+  transpilePackages: ['lucide-react'],
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.cache = false;

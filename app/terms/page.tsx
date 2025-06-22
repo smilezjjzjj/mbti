@@ -19,330 +19,329 @@ export default function TermsOfService() {
         <div className="text-center mb-12">
           <Badge variant="secondary" className="mb-4">
             <FileText className="h-4 w-4 mr-2" />
-            服务条款
+            Terms of Service
           </Badge>
           <h1 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            服务条款
+            Terms of Service
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            欢迎使用MBTI性格解读平台。请仔细阅读以下服务条款，使用我们的服务即表示您同意遵守这些条款。
+            Welcome to the MBTI Personality Interpretation Platform. Please read the following terms of service carefully. Using our service indicates that you agree to comply with these terms.
           </p>
           <div className="mt-6 text-sm text-gray-500">
-            最后更新时间：2024年12月
+            Last updated: December 2024
           </div>
         </div>
 
-        {/* 服务概述 */}
+        {/* Service Overview */}
         <Card className="modern-card mb-8">
           <CardHeader>
             <CardTitle className="flex items-center text-2xl">
               <CheckCircle className="h-6 w-6 mr-3 text-green-600" />
-              服务概述
+              Service Overview
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">我们提供的服务包括：</h3>
+              <h3 className="text-lg font-semibold mb-2">Our services include:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>基于AI技术的MBTI性格类型解读服务</li>
-                <li>个性化的职业发展建议和分析</li>
-                <li>人际关系和沟通风格指导</li>
-                <li>个人成长和潜能开发建议</li>
-                <li>相关的心理学知识和资讯</li>
+                <li>AI-powered MBTI personality type interpretation services</li>
+                <li>Personalized career development advice and analysis</li>
+                <li>Interpersonal relationship and communication style guidance</li>
+                <li>Personal growth and potential development suggestions</li>
+                <li>Related psychological knowledge and information</li>
               </ul>
             </div>
             
             <div className="bg-green-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-green-900 mb-2">服务性质</h4>
+              <h4 className="font-semibold text-green-900 mb-2">Service Nature</h4>
               <p className="text-green-800 text-sm">
-                我们的服务仅供参考和娱乐目的，不能替代专业的心理咨询或医疗建议。
+                Our services are for reference and entertainment purposes only and cannot replace professional psychological counseling or medical advice.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* 用户责任 */}
+        {/* User Responsibilities */}
         <Card className="modern-card mb-8">
           <CardHeader>
             <CardTitle className="flex items-center text-2xl">
               <Users className="h-6 w-6 mr-3 text-blue-600" />
-              用户责任与义务
+              User Responsibilities and Obligations
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">使用我们的服务时，您同意：</h3>
+              <h3 className="text-lg font-semibold mb-2">When using our services, you agree to:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>提供准确、真实的信息</li>
-                <li>不滥用或过度使用我们的服务</li>
-                <li>不尝试破坏或干扰网站的正常运行</li>
-                <li>不使用自动化工具或脚本访问我们的服务</li>
-                <li>遵守相关法律法规和社会道德规范</li>
-                <li>尊重他人的隐私和权利</li>
+                <li>Provide accurate and truthful information</li>
+                <li>Not abuse or excessively use our services</li>
+                <li>Not attempt to damage or interfere with the normal operation of the website</li>
+                <li>Not use automated tools or scripts to access our services</li>
+                <li>Comply with relevant laws, regulations, and social moral standards</li>
+                <li>Respect others' privacy and rights</li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">禁止的行为：</h3>
+              <h3 className="text-lg font-semibold mb-2">Prohibited behaviors:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>发布虚假、误导性或恶意内容</li>
-                <li>侵犯他人的知识产权</li>
-                <li>进行任何形式的网络攻击</li>
-                <li>传播病毒或恶意软件</li>
-                <li>收集其他用户的个人信息</li>
+                <li>Publishing false, misleading, or malicious content</li>
+                <li>Infringing on others' intellectual property rights</li>
+                <li>Conducting any form of cyber attacks</li>
+                <li>Spreading viruses or malicious software</li>
+                <li>Collecting other users' personal information</li>
               </ul>
             </div>
           </CardContent>
         </Card>
 
-        {/* 知识产权 */}
+        {/* Intellectual Property */}
         <Card className="modern-card mb-8">
           <CardHeader>
             <CardTitle className="flex items-center text-2xl">
-              <Shield className="h-6 w-6 mr-3 text-purple-600" />
-              知识产权
+              <Scale className="h-6 w-6 mr-3 text-purple-600" />
+              Intellectual Property
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">我们的权利：</h3>
+              <h3 className="text-lg font-semibold mb-2">Our Rights:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>网站设计、布局和用户界面的版权</li>
-                <li>AI分析算法和技术的知识产权</li>
-                <li>网站内容、文本和图像的版权</li>
-                <li>商标、品牌名称和标识的权利</li>
+                <li>All content, design, code, and features on the website are our intellectual property</li>
+                <li>Users may not copy, distribute, or commercially use our content without authorization</li>
+                <li>Our brand name, logo, and related marks are protected by trademark law</li>
+                <li>AI-generated analysis content is jointly owned by us and users</li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">您的权利：</h3>
+              <h3 className="text-lg font-semibold mb-2">Your Rights:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>您提供的个人信息仍归您所有</li>
-                <li>您可以合理使用我们提供的分析结果</li>
-                <li>您有权删除您的个人数据</li>
+                <li>You own the copyright to your personal analysis results</li>
+                <li>You may share your analysis results for non-commercial purposes</li>
+                <li>You may provide feedback and suggestions for service improvement</li>
               </ul>
             </div>
             
             <div className="bg-purple-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-purple-900 mb-2">使用许可</h4>
+              <h4 className="font-semibold text-purple-900 mb-2">Open Source</h4>
               <p className="text-purple-800 text-sm">
-                我们授予您有限的、非独占的、不可转让的许可来使用我们的服务，仅限于个人非商业用途。
+                This project is open source on GitHub. You may view, learn from, and contribute to the code under the open source license, but commercial use requires separate authorization.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* 免责声明 */}
+        {/* Disclaimer */}
         <Card className="modern-card mb-8">
           <CardHeader>
             <CardTitle className="flex items-center text-2xl">
               <AlertTriangle className="h-6 w-6 mr-3 text-orange-600" />
-              免责声明
+              Disclaimer
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">服务限制：</h3>
+              <h3 className="text-lg font-semibold mb-2">Service Limitations:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>我们的分析结果仅供参考，不保证100%准确</li>
-                <li>AI技术可能存在局限性和偏差</li>
-                <li>不同的测试结果可能会有差异</li>
-                <li>我们不对基于分析结果做出的决定负责</li>
+                <li>Our analysis results are for reference only and we do not guarantee 100% accuracy</li>
+                <li>AI technology may have limitations and biases</li>
+                <li>Different test results may vary</li>
+                <li>We are not responsible for decisions made based on analysis results</li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">技术限制：</h3>
+              <h3 className="text-lg font-semibold mb-2">Technical Limitations:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>服务可能因技术原因暂时中断</li>
-                <li>不同设备和浏览器的兼容性可能有差异</li>
-                <li>网络连接问题可能影响服务质量</li>
-                <li>第三方服务的可用性可能影响我们的服务</li>
+                <li>Services may be temporarily interrupted due to technical reasons</li>
+                <li>Compatibility may vary across different devices and browsers</li>
+                <li>Network connection issues may affect service quality</li>
+                <li>Third-party service availability may impact our services</li>
               </ul>
             </div>
             
             <div className="bg-orange-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-orange-900 mb-2">重要提醒</h4>
+              <h4 className="font-semibold text-orange-900 mb-2">Important Reminder</h4>
               <p className="text-orange-800 text-sm">
-                如果您有严重的心理健康问题，请寻求专业心理咨询师或医生的帮助，不要仅依赖我们的服务。
+                If you have serious mental health issues, please seek help from professional psychological counselors or doctors. Do not rely solely on our services.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* 责任限制 */}
+        {/* Liability Limitation */}
         <Card className="modern-card mb-8">
           <CardHeader>
             <CardTitle className="flex items-center text-2xl">
-              <Scale className="h-6 w-6 mr-3 text-red-600" />
-              责任限制
+              <Shield className="h-6 w-6 mr-3 text-red-600" />
+              Liability Limitation
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">我们不承担以下责任：</h3>
+              <h3 className="text-lg font-semibold mb-2">Limitation of Liability:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>因使用我们的服务而导致的任何直接或间接损失</li>
-                <li>因分析结果不准确而造成的决策失误</li>
-                <li>因技术故障或服务中断造成的损失</li>
-                <li>第三方服务或链接网站的内容和行为</li>
-                <li>用户数据丢失或泄露（非我们过错）</li>
+                <li>We are not liable for any direct or indirect losses caused by using our services</li>
+                <li>We are not responsible for decisions or actions based on analysis results</li>
+                <li>We are not liable for service interruptions due to technical failures or force majeure</li>
+                <li>We are not responsible for losses caused by third-party service issues</li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">赔偿限制：</h3>
+              <h3 className="text-lg font-semibold mb-2">Maximum Liability:</h3>
               <p className="text-gray-600">
-                在任何情况下，我们对您的总赔偿责任不会超过您在过去12个月内为使用我们服务支付的费用（如适用）。
+                Under any circumstances, our total liability to you shall not exceed the fees you paid for our services in the past 12 months. Since our current services are free, our maximum liability is zero.
               </p>
             </div>
             
             <div className="bg-red-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-red-900 mb-2">法律声明</h4>
+              <h4 className="font-semibold text-red-900 mb-2">User Responsibility</h4>
               <p className="text-red-800 text-sm">
-                某些司法管辖区不允许排除或限制某些损害赔偿，因此上述限制可能不适用于您。
+                You are fully responsible for your use of our services and any consequences arising therefrom. Please use our services rationally and do not make important life decisions based solely on analysis results.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* 服务变更和终止 */}
+        {/* Service Changes and Termination */}
         <Card className="modern-card mb-8">
           <CardHeader>
             <CardTitle className="flex items-center text-2xl">
               <XCircle className="h-6 w-6 mr-3 text-gray-600" />
-              服务变更和终止
+              Service Changes and Termination
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">我们的权利：</h3>
+              <h3 className="text-lg font-semibold mb-2">Our Rights:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>随时修改、暂停或终止服务</li>
-                <li>更新服务功能和用户界面</li>
-                <li>调整服务条款和隐私政策</li>
-                <li>限制或终止违规用户的访问权限</li>
+                <li>Modify, suspend, or terminate services at any time</li>
+                <li>Update service features and user interface</li>
+                <li>Adjust terms of service and privacy policy</li>
+                <li>Restrict or terminate access rights of violating users</li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">通知义务：</h3>
+              <h3 className="text-lg font-semibold mb-2">Notification Obligations:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>重大服务变更会提前通知用户</li>
-                <li>条款修改会在网站上公布</li>
-                <li>服务终止会给予合理的通知期</li>
+                <li>Major service changes will be notified to users in advance</li>
+                <li>Terms modifications will be published on the website</li>
+                <li>Service termination will be given reasonable notice period</li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">您的权利：</h3>
+              <h3 className="text-lg font-semibold mb-2">Your Rights:</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
-                <li>随时停止使用我们的服务</li>
-                <li>要求删除您的个人数据</li>
-                <li>对服务变更提出意见和建议</li>
+                <li>Stop using our services at any time</li>
+                <li>Request deletion of your personal data</li>
+                <li>Provide opinions and suggestions on service changes</li>
               </ul>
             </div>
           </CardContent>
         </Card>
 
-        {/* 争议解决 */}
+        {/* Dispute Resolution */}
         <Card className="modern-card mb-8">
           <CardHeader>
             <CardTitle className="flex items-center text-2xl">
               <Gavel className="h-6 w-6 mr-3 text-indigo-600" />
-              争议解决
+              Dispute Resolution
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">解决途径：</h3>
+              <h3 className="text-lg font-semibold mb-2">Resolution Methods:</h3>
               <ol className="list-decimal list-inside space-y-2 text-gray-600 ml-4">
-                <li><strong>友好协商：</strong>首先通过邮件或其他方式进行协商</li>
-                <li><strong>调解：</strong>如协商不成，可寻求第三方调解</li>
-                <li><strong>仲裁：</strong>根据相关仲裁规则进行仲裁</li>
-                <li><strong>诉讼：</strong>最后可通过法院诉讼解决</li>
+                <li><strong>Friendly Negotiation:</strong> First attempt negotiation through email or other means</li>
+                <li><strong>Mediation:</strong> If negotiation fails, seek third-party mediation</li>
+                <li><strong>Arbitration:</strong> Conduct arbitration according to relevant arbitration rules</li>
+                <li><strong>Litigation:</strong> Finally resolve through court litigation</li>
               </ol>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">适用法律：</h3>
+              <h3 className="text-lg font-semibold mb-2">Applicable Law:</h3>
               <p className="text-gray-600">
-                本服务条款受中华人民共和国法律管辖。任何争议将在我们注册地的人民法院解决。
+                These terms of service are governed by the laws of the People's Republic of China. Any disputes will be resolved in the people's court of our registered location.
               </p>
             </div>
             
             <div className="bg-indigo-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-indigo-900 mb-2">联系方式</h4>
+              <h4 className="font-semibold text-indigo-900 mb-2">Contact Information</h4>
               <p className="text-indigo-800 text-sm">
-                如有争议或疑问，请首先通过邮箱 smilezjjzjj@126.com 联系我们，我们会尽力妥善解决。
+                If you have disputes or questions, please first contact us via email at smilezjjzjj@126.com. We will do our best to resolve them properly.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* 其他条款 */}
+        {/* Other Terms */}
         <Card className="modern-card mb-8">
           <CardHeader>
             <CardTitle className="flex items-center text-2xl">
               <FileText className="h-6 w-6 mr-3 text-gray-600" />
-              其他条款
+              Other Terms
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">条款生效：</h3>
+              <h3 className="text-lg font-semibold mb-2">Terms Effectiveness:</h3>
               <p className="text-gray-600">
-                本服务条款自您开始使用我们的服务时生效，直至您停止使用或我们终止服务。
+                These terms of service take effect when you start using our services and remain in effect until you stop using them or we terminate the services.
               </p>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">条款修改：</h3>
+              <h3 className="text-lg font-semibold mb-2">Terms Modification:</h3>
               <p className="text-gray-600">
-                我们保留随时修改本服务条款的权利。修改后的条款将在网站上公布，继续使用服务即表示接受修改。
+                We reserve the right to modify these terms of service at any time. Modified terms will be published on the website, and continued use of the service indicates acceptance of the modifications.
               </p>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">条款分离：</h3>
+              <h3 className="text-lg font-semibold mb-2">Terms Severability:</h3>
               <p className="text-gray-600">
-                如果本条款的任何部分被认定为无效或不可执行，其余部分仍然有效。
+                If any part of these terms is deemed invalid or unenforceable, the remaining parts shall remain valid.
               </p>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">完整协议：</h3>
+              <h3 className="text-lg font-semibold mb-2">Complete Agreement:</h3>
               <p className="text-gray-600">
-                本服务条款与隐私政策构成您与我们之间的完整协议，取代之前的所有协议和理解。
+                These terms of service and privacy policy constitute the complete agreement between you and us, superseding all previous agreements and understandings.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* 联系信息 */}
+        {/* Contact Information */}
         <Card className="modern-card mb-12">
           <CardHeader>
             <CardTitle className="flex items-center text-2xl">
               <Shield className="h-6 w-6 mr-3 text-blue-600" />
-              联系我们
+              Contact Us
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">
-              如果您对本服务条款有任何疑问或需要澄清，请随时联系我们：
+              If you have any questions about these terms of service or need clarification, please contact us at any time:
             </p>
             <div className="bg-blue-50 p-4 rounded-lg">
               <div className="space-y-2">
-                <p><strong>邮箱：</strong>smilezjjzjj@126.com</p>
-                <p><strong>网站：</strong>mbti-app.online</p>
-                <p><strong>服务时间：</strong>工作日 9:00-18:00</p>
-                <p><strong>响应时间：</strong>我们将在1-3个工作日内回复您的询问</p>
+                <p><strong>Email:</strong> smilezjjzjj@126.com</p>
+                <p><strong>Website:</strong> mbti-app.online</p>
+                <p><strong>Service Hours:</strong> Weekdays 9:00-18:00</p>
+                <p><strong>Response Time:</strong> We will reply to your inquiries within 1-3 business days</p>
               </div>
             </div>
             
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-600">
-                感谢您选择我们的服务！通过使用我们的MBTI性格解读平台，您确认已阅读、理解并同意遵守本服务条款。
+                Thank you for choosing our services! By using our MBTI personality interpretation platform, you confirm that you have read, understood, and agree to comply with these terms of service.
               </p>
             </div>
           </CardContent>

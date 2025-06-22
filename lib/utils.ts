@@ -5,36 +5,36 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// MBTI相关的形容词
+// MBTI-related adjectives
 const mbtiAdjectives = {
-  E: ['活力', '开朗', '热情', '外向'],
-  I: ['深思', '安静', '内敛', '沉稳'],
-  S: ['务实', '细致', '具象', '稳重'],
-  N: ['创意', '直觉', '抽象', '灵感'],
-  T: ['理性', '逻辑', '分析', '客观'],
-  F: ['感性', '共情', '温暖', '关怀'],
-  J: ['计划', '条理', '果断', '执行'],
-  P: ['灵活', '随性', '适应', '探索']
+  E: ['energetic', 'cheerful', 'enthusiastic', 'outgoing'],
+  I: ['thoughtful', 'quiet', 'reserved', 'calm'],
+  S: ['practical', 'detailed', 'concrete', 'steady'],
+  N: ['creative', 'intuitive', 'abstract', 'inspired'],
+  T: ['rational', 'logical', 'analytical', 'objective'],
+  F: ['emotional', 'empathetic', 'warm', 'caring'],
+  J: ['planned', 'organized', 'decisive', 'structured'],
+  P: ['flexible', 'spontaneous', 'adaptable', 'exploratory']
 };
 
 const animals = [
-  '猫', '狐狸', '兔子', '熊猫', '浣熊', 
-  '柴犬', '企鹅', '考拉', '松鼠', '海豚',
-  '猫头鹰', '小鹿', '羊驼', '仓鼠', '北极熊'
+  'cat', 'fox', 'rabbit', 'panda', 'raccoon', 
+  'shiba', 'penguin', 'koala', 'squirrel', 'dolphin',
+  'owl', 'deer', 'alpaca', 'hamster', 'polar bear'
 ];
 
-// 生成随机昵称
+// Generate random nickname
 export function generateNickname(mbtiType: string | null = null): string {
   const getRandomElement = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
   
   let adjective = '';
   if (mbtiType) {
-    // 从MBTI类型中随机选择一个维度的形容词
+    // Randomly select an adjective from one dimension of the MBTI type
     const dimensions = mbtiType.split('');
     const randomDimension = getRandomElement(dimensions);
     adjective = getRandomElement(mbtiAdjectives[randomDimension as keyof typeof mbtiAdjectives]);
   } else {
-    // 随机从所有形容词中选择
+    // Randomly select from all adjectives
     const allAdjectives = Object.values(mbtiAdjectives).flat();
     adjective = getRandomElement(allAdjectives);
   }
@@ -42,18 +42,18 @@ export function generateNickname(mbtiType: string | null = null): string {
   const animal = getRandomElement(animals);
   const number = Math.floor(Math.random() * 1000);
   
-  return `${adjective}的${animal}${number}`;
+  return `${adjective} ${animal} ${number}`;
 }
 
-// 获取头像URL
+// Get avatar URL
 export function getAvatarUrl(nickname: string): string {
-  // 使用DiceBear的可爱风格头像
-  const style = 'adventurer-neutral'; // 也可以使用: 'avataaars', 'bottts', 'pixel-art' 等
+  // Use DiceBear's cute style avatars
+  const style = 'adventurer-neutral'; // Can also use: 'avataaars', 'bottts', 'pixel-art' etc
   const seed = encodeURIComponent(nickname);
   return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
 }
 
-// 获取头像背景色
+// Get avatar background color
 export function getAvatarBackground(nickname: string): string {
   const backgrounds = [
     'bg-gradient-to-br from-blue-400 to-blue-300',

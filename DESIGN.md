@@ -1,14 +1,14 @@
-# 🎨 设计系统文档
+# 🎨 Design System Documentation
 
-## 设计理念
+## Design Philosophy
 
-本项目采用现代化的设计语言，融合了玻璃态效果、渐变背景和流畅动画，打造出具有科技感和未来感的用户界面。设计灵感来源于现代Web应用的最佳实践，注重用户体验和视觉美感的平衡。
+This project adopts a modern design language, integrating glass morphism effects, gradient backgrounds, and smooth animations to create a tech-savvy and futuristic user interface. The design inspiration comes from modern web application best practices, focusing on the balance between user experience and visual aesthetics.
 
-## 🌈 配色系统
+## 🌈 Color System
 
-### 主要渐变色
+### Primary Gradients
 ```css
-/* 主背景渐变 */
+/* Main background gradient */
 background: linear-gradient(135deg, 
   #a8edea 0%, 
   #fed6e3 25%, 
@@ -16,22 +16,22 @@ background: linear-gradient(135deg,
   #fef9d7 75%, 
   #89f7fe 100%);
 
-/* 按钮渐变 */
+/* Button gradient */
 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
-/* 标题渐变 */
+/* Title gradient */
 background: linear-gradient(to right, #667eea, #764ba2, #f093fb, #f5576c, #4facfe);
 ```
 
-### 语义化颜色
-- **成功色**: 绿色系 (#10B981, #059669)
-- **警告色**: 橙色系 (#F59E0B, #D97706)
-- **错误色**: 红色系 (#EF4444, #DC2626)
-- **信息色**: 蓝色系 (#3B82F6, #2563EB)
+### Semantic Colors
+- **Success Color**: Green series (#10B981, #059669)
+- **Warning Color**: Orange series (#F59E0B, #D97706)
+- **Error Color**: Red series (#EF4444, #DC2626)
+- **Info Color**: Blue series (#3B82F6, #2563EB)
 
-## 🪟 玻璃态效果
+## 🪟 Glass Morphism Effects
 
-### 基础玻璃效果
+### Basic Glass Effect
 ```css
 .glass-effect {
   background: rgba(255, 255, 255, 0.25);
@@ -41,7 +41,7 @@ background: linear-gradient(to right, #667eea, #764ba2, #f093fb, #f5576c, #4facf
 }
 ```
 
-### 现代化卡片
+### Modern Card
 ```css
 .modern-card {
   background: rgba(255, 255, 255, 0.9);
@@ -58,9 +58,9 @@ background: linear-gradient(to right, #667eea, #764ba2, #f093fb, #f5576c, #4facf
 }
 ```
 
-## 🎭 组件样式
+## 🎭 Component Styles
 
-### 技术标签
+### Tech Tags
 ```css
 .tech-tag {
   background: rgba(255, 255, 255, 0.8);
@@ -74,7 +74,7 @@ background: linear-gradient(to right, #667eea, #764ba2, #f093fb, #f5576c, #4facf
 }
 ```
 
-### 现代化按钮
+### Modern Button
 ```css
 .modern-button {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -93,9 +93,9 @@ background: linear-gradient(to right, #667eea, #764ba2, #f093fb, #f5576c, #4facf
 }
 ```
 
-## 🎬 动画系统
+## 🎬 Animation System
 
-### 渐变动画
+### Gradient Animation
 ```css
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
@@ -109,7 +109,7 @@ background: linear-gradient(to right, #667eea, #764ba2, #f093fb, #f5576c, #4facf
 }
 ```
 
-### 淡入动画
+### Fade In Animation
 ```css
 @keyframes fade-in {
   0% { opacity: 0; transform: translateY(20px); }
@@ -121,7 +121,7 @@ background: linear-gradient(to right, #667eea, #764ba2, #f093fb, #f5576c, #4facf
 }
 ```
 
-### 缩放动画
+### Scale In Animation
 ```css
 @keyframes scale-in {
   0% { opacity: 0; transform: scale(0.9); }
@@ -133,82 +133,82 @@ background: linear-gradient(to right, #667eea, #764ba2, #f093fb, #f5576c, #4facf
 }
 ```
 
-## 📱 响应式设计
+## 📱 Responsive Design
 
-### 断点系统
-- **sm**: 640px (手机横屏)
-- **md**: 768px (平板)
-- **lg**: 1024px (小型桌面)
-- **xl**: 1280px (大型桌面)
-- **2xl**: 1536px (超大屏幕)
+### Breakpoint System
+- **sm**: 640px (Mobile landscape)
+- **md**: 768px (Tablet)
+- **lg**: 1024px (Small desktop)
+- **xl**: 1280px (Large desktop)
+- **2xl**: 1536px (Extra large screen)
 
-### 移动端优化
-- 触摸友好的按钮尺寸 (最小44px)
-- 适当的间距和字体大小
-- 简化的导航结构
-- 优化的加载动画
+### Mobile Optimization
+- Touch-friendly button sizes (minimum 44px)
+- Appropriate spacing and font sizes
+- Simplified navigation structure
+- Optimized loading animations
 
-## 🎯 用户体验原则
+## 🎯 User Experience Principles
 
-### 视觉层次
-1. **主要内容**: 使用最高对比度和最大字体
-2. **次要内容**: 中等对比度和字体大小
-3. **辅助信息**: 低对比度和小字体
+### Visual Hierarchy
+1. **Primary Content**: Use highest contrast and largest font
+2. **Secondary Content**: Medium contrast and font size
+3. **Supporting Information**: Low contrast and small font
 
-### 交互反馈
-- **悬停效果**: 轻微的阴影和位移变化
-- **点击反馈**: 按钮按下效果和颜色变化
-- **加载状态**: 优雅的骨架屏和进度指示器
-- **错误提示**: 清晰的错误信息和恢复建议
+### Interaction Feedback
+- **Hover Effects**: Subtle shadow and position changes
+- **Click Feedback**: Button press effects and color changes
+- **Loading States**: Elegant skeleton screens and progress indicators
+- **Error Prompts**: Clear error messages and recovery suggestions
 
-### 可访问性
-- 充足的颜色对比度 (WCAG AA 标准)
-- 键盘导航支持
-- 屏幕阅读器友好的语义化标签
-- 焦点指示器清晰可见
+### Accessibility
+- Sufficient color contrast (WCAG AA standard)
+- Keyboard navigation support
+- Screen reader-friendly semantic tags
+- Clear and visible focus indicators
 
-## 🎨 设计组件库
+## 🎨 Design Component Library
 
-### 卡片组件
-- **基础卡片**: 简单的白色背景卡片
-- **玻璃卡片**: 毛玻璃效果的半透明卡片
-- **渐变卡片**: 带有渐变背景的特殊卡片
+### Card Components
+- **Basic Card**: Simple white background card
+- **Glass Card**: Semi-transparent card with frosted glass effect
+- **Gradient Card**: Special card with gradient background
 
-### 按钮组件
-- **主要按钮**: 渐变背景的行动召唤按钮
-- **次要按钮**: 透明背景的边框按钮
-- **文本按钮**: 纯文本样式的链接按钮
+### Button Components
+- **Primary Button**: Gradient background call-to-action button
+- **Secondary Button**: Transparent background border button
+- **Text Button**: Plain text style link button
 
-### 输入组件
-- **文本输入**: 玻璃效果的输入框
-- **选择器**: 网格布局的选项按钮
-- **文本域**: 多行文本输入框
+### Input Components
+- **Text Input**: Input box with glass effect
+- **Selector**: Grid layout option buttons
+- **Text Area**: Multi-line text input box
 
-## 🌟 特色设计元素
+## 🌟 Featured Design Elements
 
-### 技术标签云
-展示项目使用的技术栈，采用胶囊形状和悬停动画效果。
+### Tech Tag Cloud
+Display the technology stack used in the project, using capsule shapes and hover animation effects.
 
-### 渐变文字
-标题和重要文本使用彩虹渐变效果，增强视觉冲击力。
+### Gradient Text
+Titles and important text use rainbow gradient effects to enhance visual impact.
 
-### 动态背景
-页面背景采用缓慢移动的渐变动画，营造动态氛围。
+### Dynamic Background
+Page background uses slowly moving gradient animation to create a dynamic atmosphere.
 
-### 头像系统
-集成 DiceBear API，为用户生成个性化的 SVG 头像。
+### Avatar System
+Integrate DiceBear API to generate personalized SVG avatars for users.
 
-## 🔧 实现细节
+## 🔧 Implementation Details
 
-### CSS 变量系统
-使用 CSS 自定义属性管理主题色彩和尺寸，便于维护和定制。
+### CSS Variable System
+Use CSS custom properties to manage theme colors and dimensions for easy maintenance and customization.
 
-### Tailwind 扩展
-通过 `tailwind.config.ts` 扩展默认配置，添加自定义颜色、动画和工具类。
+### Tailwind Extension
+Extend the default configuration through `tailwind.config.ts` to add custom colors, animations, and utility classes.
 
-### 组件复用
-创建可复用的样式类，确保设计一致性和开发效率。
+### Component Reusability
+Create reusable style classes to ensure design consistency and development efficiency.
 
 ---
 
-这套设计系统旨在创造一个现代、优雅且用户友好的界面，同时保持良好的性能和可访问性。 
+This design system aims to create a modern, elegant, and user-friendly interface while maintaining good performance and accessibility. 

@@ -1,27 +1,25 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons';
+import { AlertCircle, Wifi, WifiOff } from 'lucide-react';
 
 export default function NetworkStatusClient() {
   const [isOnline, setIsOnline] = useState(true);
-  const [showMessage, setShowMessage] = useState(false);
+  const [showOfflineMessage, setShowOfflineMessage] = useState(false);
 
   useEffect(() => {
-    // 初始化网络状态
+    // Initialize network status
     setIsOnline(navigator.onLine);
 
-    // 监听网络状态变化
+    // Listen for network status changes
     const handleOnline = () => {
       setIsOnline(true);
-      // 显示短暂的提示
-      setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 3000);
+      setShowOfflineMessage(false);
     };
 
     const handleOffline = () => {
       setIsOnline(false);
-      setShowMessage(true);
+      setShowOfflineMessage(true);
     };
 
     window.addEventListener('online', handleOnline);
@@ -33,21 +31,14 @@ export default function NetworkStatusClient() {
     };
   }, []);
 
-  if (!showMessage) return null;
+  if (!showOfflineMessage) return null;
 
   return (
-    <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 py-2 px-4 rounded-full shadow-md transition-all duration-300 ${isOnline ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-      {isOnline ? (
-        <>
-          <CheckIcon className="h-4 w-4" />
-          <span className="text-sm">网络已连接</span>
-        </>
-      ) : (
-        <>
-          <Cross2Icon className="h-4 w-4" />
-          <span className="text-sm">网络已断开</span>
-        </>
-      )}
+    <div className="fixed top-0 left-0 right-0 z-50 bg-red-500 text-white p-2 text-center text-sm">
+      <div className="flex items-center justify-center space-x-2">
+        <WifiOff className="h-4 w-4" />
+        <span>Network connection lost. Please check your network.</span>
+      </div>
     </div>
   );
 } 

@@ -8,8 +8,8 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'MBTI解读 - 探索你的性格类型',
-  description: '基于人工智能的MBTI性格类型解读工具，帮助你更好地了解自己',
+  title: 'MBTI Interpretation - Explore Your Personality Type',
+  description: 'AI-powered MBTI personality type interpretation tool to help you better understand yourself',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
 };
 
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh">
+    <html lang="en">
       <head>
         {/* Google Analytics */}
         <Script

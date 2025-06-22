@@ -18,7 +18,7 @@ interface CommentSectionProps {
   mbtiType: string | null;
 }
 
-// 评论加载占位符
+// Comment loading placeholder
 function CommentSkeleton() {
   return (
     <div className="animate-pulse space-y-4">
@@ -35,12 +35,12 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
   const [isEditingNickname, setIsEditingNickname] = useState(false);
   const [tempNickname, setTempNickname] = useState('');
   const [userNickname, setUserNickname] = useState(() => {
-    // 优先使用存储的昵称，如果没有则返回空字符串让用户输入
+    // Prioritize stored nickname, return empty string if none to let user input
     const savedNickname = getUserNickname();
     return savedNickname || '';
   });
 
-  // 如果没有昵称，自动进入编辑模式
+  // If no nickname, automatically enter edit mode
   useEffect(() => {
     if (!userNickname) {
       setIsEditingNickname(true);
@@ -48,7 +48,7 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
     }
   }, [userNickname]);
 
-  // 加载评论
+  // Load comments
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -67,13 +67,13 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
     loadData();
   }, [mbtiType]);
 
-  // 开始编辑昵称
+  // Start editing nickname
   const startEditingNickname = () => {
     setTempNickname(userNickname);
     setIsEditingNickname(true);
   };
 
-  // 保存昵称
+  // Save nickname
   const saveNickname = () => {
     const nickname = tempNickname.trim();
     if (nickname) {
@@ -83,16 +83,16 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
     }
   };
 
-  // 取消编辑昵称
+  // Cancel editing nickname
   const cancelEditingNickname = () => {
     setTempNickname('');
-    // 如果用户没有昵称，不能取消编辑，必须输入昵称
+    // If user has no nickname, cannot cancel editing, must input nickname
     if (userNickname) {
       setIsEditingNickname(false);
     }
   };
 
-  // 提交评论
+  // Submit comment
   const handleSubmitComment = () => {
     if (!commentText.trim() || !userNickname) return;
     
@@ -110,13 +110,13 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
     setCommentText('');
   };
 
-  // 删除评论
+  // Delete comment
   const handleDeleteComment = (commentId: string) => {
     deleteComment(commentId);
     setComments(comments.filter(comment => comment.id !== commentId));
   };
 
-  // 点赞评论
+  // Like comment
   const handleLikeComment = (commentId: string) => {
     likeComment(commentId);
     setComments(comments.map(comment => {
@@ -130,7 +130,7 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
     }));
   };
 
-  // 格式化日期
+  // Format date
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp);
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
@@ -143,12 +143,12 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
   return (
     <Suspense fallback={<CommentSkeleton />}>
       <div className="w-full space-y-4 sm:space-y-6">
-        {/* 发表评论区域 */}
+        {/* Post Comment Area */}
         <div className="glass-effect rounded-2xl p-4 sm:p-6">
           <div className="flex items-start gap-3 mb-4 sm:mb-6">
-            <Avatar className={`h-10 w-10 sm:h-12 sm:w-12 ring-2 sm:ring-3 ring-white/50 flex-shrink-0 ${getAvatarBackground(userNickname || '用户')}`}>
-              <AvatarImage src={getAvatarUrl(userNickname || '用户')} alt={userNickname || '用户'} />
-              <AvatarFallback className="font-semibold text-sm sm:text-base">{(userNickname || '用')[0]}</AvatarFallback>
+            <Avatar className={`h-10 w-10 sm:h-12 sm:w-12 ring-2 sm:ring-3 ring-white/50 flex-shrink-0 ${getAvatarBackground(userNickname || 'User')}`}>
+              <AvatarImage src={getAvatarUrl(userNickname || 'User')} alt={userNickname || 'User'} />
+              <AvatarFallback className="font-semibold text-sm sm:text-base">{(userNickname || 'U')[0]}</AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               {isEditingNickname ? (
@@ -156,7 +156,7 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
                   <Input
                     value={tempNickname}
                     onChange={(e) => setTempNickname(e.target.value)}
-                    placeholder="昵称"
+                    placeholder="Nickname"
                     className="glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 w-full sm:w-32 h-10 text-sm"
                     maxLength={20}
                     onKeyPress={(e) => {
@@ -181,7 +181,7 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
                         size="sm"
                         className="px-3 h-10 flex-1 sm:flex-none"
                       >
-                        取消
+                        Cancel
                       </Button>
                     )}
                   </div>
@@ -190,14 +190,14 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
                 <div className="flex items-center justify-between">
                   <div className="min-w-0 flex-1">
                     <div className="font-semibold text-gray-800 text-sm sm:text-base truncate">{userNickname}</div>
-                    <div className="text-xs sm:text-sm text-gray-600">当前用户</div>
+                    <div className="text-xs sm:text-sm text-gray-600">Current User</div>
                   </div>
                   <Button
                     onClick={startEditingNickname}
                     variant="ghost"
                     size="sm"
                     className="text-gray-500 hover:text-gray-700 p-2 flex-shrink-0"
-                    title="修改昵称"
+                    title="Edit nickname"
                   >
                     <EditIcon className="h-4 w-4" />
                   </Button>
@@ -208,7 +208,7 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
           
           <div className="space-y-3 sm:space-y-4">
             <Textarea 
-              placeholder={userNickname ? "分享你的MBTI体验和感悟..." : "请先设置昵称再发表评论..."} 
+              placeholder={userNickname ? "Share your MBTI experience and insights..." : "Please set a nickname before posting comments..."} 
               value={commentText} 
               onChange={(e) => setCommentText(e.target.value)}
               className="min-h-[100px] sm:min-h-[120px] glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 resize-none text-sm sm:text-base"
@@ -221,21 +221,21 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
                 className="modern-button disabled:opacity-50 disabled:cursor-not-allowed h-10 sm:h-auto px-4 sm:px-6 text-sm sm:text-base"
               >
                 <MessageCircleIcon className="h-4 w-4 mr-2" />
-                发表评论
+                Post Comment
               </Button>
             </div>
           </div>
         </div>
         
-        {/* 评论列表 */}
+        {/* Comments List */}
         <div className="space-y-3 sm:space-y-4">
           {comments.length === 0 ? (
             <div className="glass-effect rounded-2xl p-6 sm:p-8 text-center">
               <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
                 <MessageCircleIcon className="h-6 w-6 sm:h-8 sm:w-8 text-purple-500" />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">还没有评论</h3>
-              <p className="text-sm sm:text-base text-gray-600">成为第一个分享想法的人吧！</p>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">No comments yet</h3>
+              <p className="text-sm sm:text-base text-gray-600">Be the first to share your thoughts!</p>
             </div>
           ) : (
             comments.map((comment, index) => (
@@ -269,7 +269,7 @@ export default function CommentSection({ mbtiType }: CommentSectionProps) {
                           <button
                             onClick={() => handleDeleteComment(comment.id)}
                             className="text-red-500 hover:text-red-700 p-1.5 sm:p-2 rounded-lg hover:bg-red-50 transition-all duration-200"
-                            title="删除评论"
+                            title="Delete comment"
                           >
                             <Trash2Icon size={14} className="sm:w-4 sm:h-4" />
                           </button>

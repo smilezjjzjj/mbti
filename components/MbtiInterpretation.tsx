@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { generateMbtiInterpretationWithDeepseek } from '@/lib/deepseek';
-import { Loader2, User, Briefcase, Heart, TrendingUp, RefreshCw, Lightbulb, ArrowLeft, BookOpen, Target, Users } from 'lucide-react';
+import { Loader2, User, Briefcase, Heart, TrendingUp, RefreshCw, Lightbulb, ArrowLeft, BookOpen, Target, Users, AlertCircle } from 'lucide-react';
 
 interface MbtiInterpretationProps {
   mbtiType: string;
@@ -23,7 +23,7 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
     setLoading(true);
     setError(null);
     setLoadingProgress(0);
-    setLoadingMessage(quickMode ? '启动快速解读模式...' : '启动AI深度分析...');
+    setLoadingMessage(quickMode ? 'Starting quick analysis mode...' : 'Starting AI deep analysis...');
     
     if (isRetry) {
       setRetryCount(prev => prev + 1);
@@ -31,27 +31,27 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
       setRetryCount(0);
     }
     
-    // 根据模式调整进度更新速度
+    // Adjust progress update speed based on mode
     const progressInterval = setInterval(() => {
       setLoadingProgress(prev => {
         if (prev < 90) {
           const increment = quickMode ? Math.random() * 25 + 10 : Math.random() * 15 + 5;
           const newProgress = Math.min(prev + increment, 90);
           
-          // 根据进度和模式更新消息
+          // Update message based on progress and mode
           if (quickMode) {
             if (newProgress < 50) {
-              setLoadingMessage(isRetry ? '重新连接中...' : '快速分析性格特质...');
+              setLoadingMessage(isRetry ? 'Reconnecting...' : 'Quick analysis of personality traits...');
             } else if (newProgress < 90) {
-              setLoadingMessage('生成解读报告...');
+              setLoadingMessage('Generating interpretation report...');
             }
           } else {
             if (newProgress < 30) {
-              setLoadingMessage(isRetry ? '重新连接AI服务...' : '深度分析性格类型...');
+              setLoadingMessage(isRetry ? 'Reconnecting to AI service...' : 'Deep analysis of personality type...');
             } else if (newProgress < 60) {
-              setLoadingMessage('构建个性化解读...');
+              setLoadingMessage('Building personalized interpretation...');
             } else if (newProgress < 90) {
-              setLoadingMessage('生成专业建议...');
+              setLoadingMessage('Generating professional advice...');
             }
           }
           
@@ -64,26 +64,26 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
     try {
       const result = await generateMbtiInterpretationWithDeepseek(mbtiType, quickMode);
       setLoadingProgress(100);
-      setLoadingMessage('解读完成！');
+      setLoadingMessage('Interpretation complete!');
       setInterpretation(result);
-      setRetryCount(0); // 成功后重置重试计数
+      setRetryCount(0); // Reset retry count on success
     } catch (err) {
-      console.error('生成解读失败:', err);
+      console.error('Failed to generate interpretation:', err);
       
-      // 智能错误处理 - 不直接显示技术错误信息
-      let friendlyError = '服务暂时繁忙，请稍后重试';
+      // Smart error handling - don't directly show technical error messages
+      let friendlyError = 'Service temporarily busy, please try again later';
       
       if (err instanceof Error) {
         const errorMessage = err.message.toLowerCase();
         
         if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
-          friendlyError = '网络连接不稳定';
+          friendlyError = 'Network connection unstable';
         } else if (errorMessage.includes('timeout') || errorMessage.includes('abort')) {
-          friendlyError = '请求超时，服务器响应较慢';
+          friendlyError = 'Request timeout, server response is slow';
         } else if (errorMessage.includes('rate limit') || errorMessage.includes('quota')) {
-          friendlyError = '当前访问量较大，请稍后再试';
+          friendlyError = 'High traffic currently, please try again later';
         } else if (errorMessage.includes('unauthorized') || errorMessage.includes('api key')) {
-          friendlyError = '服务配置异常，请联系管理员';
+          friendlyError = 'Service configuration error, please contact administrator';
         }
       }
       
@@ -104,429 +104,429 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
 
   const sectionTitles = [
     { 
-      title: '职业发展深度解析', 
+      title: 'Career Development In-Depth Analysis', 
       icon: Briefcase, 
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
       borderColor: 'border-blue-200',
       gradientFrom: 'from-blue-500',
       gradientTo: 'to-blue-600',
-      description: '探索您的职业优势与发展路径'
+      description: 'Explore your career advantages and development paths'
     },
     { 
-      title: '人际关系深度剖析', 
+      title: 'Interpersonal Relationships In-Depth Analysis', 
       icon: Heart, 
       color: 'text-rose-600',
       bgColor: 'bg-rose-50',
       borderColor: 'border-rose-200',
       gradientFrom: 'from-rose-500',
       gradientTo: 'to-pink-600',
-      description: '深入了解您的社交模式与关系建立'
+      description: 'Deep understanding of your social patterns and relationship building'
     },
     { 
-      title: '个人成长全面指南', 
+      title: 'Personal Growth Comprehensive Guide', 
       icon: TrendingUp, 
       color: 'text-emerald-600',
       bgColor: 'bg-emerald-50',
       borderColor: 'border-emerald-200',
       gradientFrom: 'from-emerald-500',
       gradientTo: 'to-teal-600',
-      description: '制定专属的成长策略与发展计划'
+      description: 'Create exclusive growth strategies and development plans'
     }
   ];
 
-  // 为每个部分提供针对性的实用建议
+  // Provide targeted practical advice for each section
   const getSectionAdvice = (index: number, mbtiType: string) => {
     const adviceData: { [key: string]: string[][] } = {
       'INTJ': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '学习系统架构设计',
-          '培养战略思维能力', 
-          '掌握项目管理技能',
-          '建立个人品牌影响力'
+          'Learn system architecture design',
+          'Develop strategic thinking skills', 
+          'Master project management skills',
+          'Build personal brand influence'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '练习主动倾听技巧',
-          '学会表达情感需求',
-          '定期维护重要关系',
-          '参与团队协作项目'
+          'Practice active listening skills',
+          'Learn to express emotional needs',
+          'Regularly maintain important relationships',
+          'Participate in team collaboration projects'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '设定5年职业规划',
-          '培养公众演讲能力',
-          '学习跨领域知识',
-          '建立反思总结习惯'
+          'Set 5-year career plan',
+          'Develop public speaking abilities',
+          'Learn cross-disciplinary knowledge',
+          'Build reflection and summary habits'
         ]
       ],
       'ENFP': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展创意表达技能',
-          '建立广泛人脉网络',
-          '学习项目执行方法',
-          '培养市场敏感度'
+          'Develop creative expression skills',
+          'Build extensive professional networks',
+          'Learn project execution methods',
+          'Cultivate market sensitivity'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会深度倾听',
-          '练习冲突解决技巧',
-          '建立稳定友谊圈',
-          '平衡给予与接受'
+          'Learn deep listening skills',
+          'Practice conflict resolution techniques',
+          'Build stable friendship circles',
+          'Balance giving and receiving'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '培养专注力训练',
-          '建立目标管理系统',
-          '学习情绪调节技巧',
-          '发展长期坚持能力'
+          'Cultivate focus training',
+          'Build goal management systems',
+          'Learn emotional regulation techniques',
+          'Develop long-term persistence abilities'
         ]
       ],
       'ISTJ': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '掌握新技术工具',
-          '建立标准化流程',
-          '培养团队领导力',
-          '学习变革管理'
+          'Master new technology tools',
+          'Build standardized processes',
+          'Cultivate team leadership',
+          'Learn change management'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '练习情感表达',
-          '学会灵活沟通',
-          '主动关心他人',
-          '参与社交活动'
+          'Practice emotional expression',
+          'Learn flexible communication',
+          'Actively care for others',
+          'Participate in social activities'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '拥抱适度变化',
-          '培养创新思维',
-          '学习压力管理',
-          '发展兴趣爱好'
+          'Embrace moderate change',
+          'Cultivate innovative thinking',
+          'Learn stress management',
+          'Develop hobbies and interests'
         ]
       ],
       'ESFP': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展人际影响力',
-          '学习客户服务技巧',
-          '培养团队协作能力',
-          '掌握沟通表达技能'
+          'Develop performance and presentation skills',
+          'Learn customer service excellence',
+          'Cultivate event planning abilities',
+          'Build social media presence'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会深度交流',
-          '建立长期关系',
-          '练习边界设定',
-          '发展同理心技能'
+          'Learn to handle criticism',
+          'Practice deep conversation skills',
+          'Build lasting friendships',
+          'Develop conflict resolution'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '培养计划执行力',
-          '学习时间管理',
-          '发展专业技能',
-          '建立学习习惯'
+          'Cultivate long-term planning',
+          'Learn financial management',
+          'Develop analytical thinking',
+          'Build study discipline'
         ]
       ],
       'INFJ': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展咨询指导技能',
-          '学习内容创作',
-          '培养教育培训能力',
-          '建立专业声誉'
+          'Develop counseling and coaching skills',
+          'Learn writing and communication',
+          'Cultivate research abilities',
+          'Build thought leadership'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会设定边界',
-          '练习直接沟通',
-          '建立支持网络',
-          '平衡独处与社交'
+          'Learn to set healthy boundaries',
+          'Practice assertive communication',
+          'Build supportive networks',
+          'Develop social confidence'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '将理想转化为行动',
-          '学习压力释放技巧',
-          '培养实用技能',
-          '建立自我关怀习惯'
+          'Cultivate practical implementation',
+          'Learn stress management',
+          'Develop self-care routines',
+          'Build realistic expectations'
         ]
       ],
       'ENTP': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展创新思维',
-          '学习快速原型制作',
-          '培养说服影响力',
-          '掌握多项目管理'
+          'Develop innovation and entrepreneurship',
+          'Learn debate and persuasion',
+          'Cultivate strategic thinking',
+          'Build diverse skill sets'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会深度承诺',
-          '练习耐心倾听',
-          '建立稳定关系',
-          '发展情感智慧'
+          'Practice patience and listening',
+          'Learn to follow through',
+          'Build deep connections',
+          'Develop empathy skills'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '培养执行完成力',
-          '学习细节关注',
-          '建立持续学习',
-          '发展专业深度'
+          'Cultivate focus and completion',
+          'Learn routine establishment',
+          'Develop emotional intelligence',
+          'Build consistent habits'
         ]
       ],
       'ISFJ': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展服务管理技能',
-          '学习团队协调',
-          '培养质量控制能力',
-          '建立专业网络'
+          'Develop healthcare and service skills',
+          'Learn administrative excellence',
+          'Cultivate teaching abilities',
+          'Build professional certifications'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会表达需求',
-          '练习说"不"的技巧',
-          '建立互惠关系',
-          '发展自信表达'
+          'Learn to ask for help',
+          'Practice saying no appropriately',
+          'Build reciprocal relationships',
+          'Develop self-advocacy'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '培养自我倡导',
-          '学习变化适应',
-          '发展创新思维',
-          '建立个人目标'
+          'Cultivate self-confidence',
+          'Learn to take calculated risks',
+          'Develop innovation skills',
+          'Build personal interests'
         ]
       ],
       'ESTP': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展销售谈判技能',
-          '学习危机处理',
-          '培养团队激励能力',
-          '掌握实战经验'
+          'Develop sales and negotiation skills',
+          'Learn hands-on technical skills',
+          'Cultivate emergency response',
+          'Build networking abilities'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会深度交流',
-          '练习长期承诺',
-          '建立稳定友谊',
-          '发展情感敏感度'
+          'Practice long-term commitment',
+          'Learn emotional depth',
+          'Build stable relationships',
+          'Develop listening patience'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '培养长远规划',
-          '学习理论学习',
-          '发展反思能力',
-          '建立学习习惯'
+          'Cultivate strategic planning',
+          'Learn theoretical understanding',
+          'Develop reflection habits',
+          'Build learning systems'
         ]
       ],
       'INFP': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展创意写作技能',
-          '学习个人品牌建设',
-          '培养独立工作能力',
-          '建立价值观匹配'
+          'Develop creative writing skills',
+          'Learn artistic expression',
+          'Cultivate counseling abilities',
+          'Build portfolio and showcase'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会直接沟通',
-          '练习冲突处理',
-          '建立支持圈子',
-          '发展社交技能'
+          'Practice assertive communication',
+          'Learn conflict engagement',
+          'Build professional networks',
+          'Develop social skills'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '将想法付诸实践',
-          '学习时间管理',
-          '培养决策能力',
-          '建立行动计划'
-        ]
-      ],
-      'ESTJ': [
-        // 职业发展建议
-        [
-          '发展战略领导力',
-          '学习数字化管理',
-          '培养创新思维',
-          '建立行业影响力'
-        ],
-        // 人际关系建议
-        [
-          '学会灵活沟通',
-          '练习情感理解',
-          '建立多元关系',
-          '发展包容性'
-        ],
-        // 个人成长建议
-        [
-          '培养适应性思维',
-          '学习创意方法',
-          '发展情商技能',
-          '建立工作生活平衡'
-        ]
-      ],
-      'ISFP': [
-        // 职业发展建议
-        [
-          '发展艺术创作技能',
-          '学习客户关系管理',
-          '培养手工技艺',
-          '建立作品集'
-        ],
-        // 人际关系建议
-        [
-          '学会主动表达',
-          '练习自我倡导',
-          '建立信任关系',
-          '发展沟通自信'
-        ],
-        // 个人成长建议
-        [
-          '培养目标设定',
-          '学习自我推广',
-          '发展组织能力',
-          '建立成长计划'
-        ]
-      ],
-      'ESFJ': [
-        // 职业发展建议
-        [
-          '发展人力资源技能',
-          '学习团队建设',
-          '培养服务管理',
-          '建立专业认证'
-        ],
-        // 人际关系建议
-        [
-          '学会设定边界',
-          '练习接受批评',
-          '建立平等关系',
-          '发展独立性'
-        ],
-        // 个人成长建议
-        [
-          '培养批判思维',
-          '学习变革适应',
-          '发展创新能力',
-          '建立个人兴趣'
-        ]
-      ],
-      'INTP': [
-        // 职业发展建议
-        [
-          '发展技术专长',
-          '学习研究方法',
-          '培养理论建构',
-          '建立学术声誉'
-        ],
-        // 人际关系建议
-        [
-          '学会情感表达',
-          '练习社交技巧',
-          '建立协作关系',
-          '发展团队精神'
-        ],
-        // 个人成长建议
-        [
-          '培养实践应用',
-          '学习项目管理',
-          '发展沟通技能',
-          '建立执行力'
+          'Cultivate practical skills',
+          'Learn time management',
+          'Develop organizational abilities',
+          'Build achievement habits'
         ]
       ],
       'ENTJ': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展企业战略',
-          '学习全球化管理',
-          '培养创新领导',
-          '建立商业帝国'
+          'Develop executive leadership',
+          'Learn strategic planning',
+          'Cultivate business acumen',
+          'Build industry expertise'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会情感关怀',
-          '练习耐心倾听',
-          '建立信任文化',
-          '发展人文关怀'
+          'Practice empathetic listening',
+          'Learn collaborative leadership',
+          'Build inclusive culture',
+          'Develop emotional intelligence'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '培养工作生活平衡',
-          '学习压力管理',
-          '发展情商技能',
-          '建立可持续发展'
+          'Cultivate work-life balance',
+          'Learn stress management',
+          'Develop mindfulness practices',
+          'Build sustainable habits'
+        ]
+      ],
+      'INTP': [
+        // Career Development Advice
+        [
+          'Develop research and analysis',
+          'Learn technical expertise',
+          'Cultivate problem-solving',
+          'Build knowledge specialization'
+        ],
+        // Interpersonal Relationship Advice
+        [
+          'Practice social interaction',
+          'Learn emotional expression',
+          'Build collaborative skills',
+          'Develop networking abilities'
+        ],
+        // Personal Growth Advice
+        [
+          'Cultivate practical application',
+          'Learn project completion',
+          'Develop communication skills',
+          'Build implementation habits'
         ]
       ],
       'ENFJ': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展教练指导技能',
-          '学习组织发展',
-          '培养公众演讲',
-          '建立影响力平台'
+          'Develop teaching and mentoring',
+          'Learn organizational leadership',
+          'Cultivate public speaking',
+          'Build community influence'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会自我关怀',
-          '练习设定边界',
-          '建立支持系统',
-          '发展个人需求表达'
+          'Learn to receive support',
+          'Practice self-care boundaries',
+          'Build reciprocal relationships',
+          'Develop personal time'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '培养个人兴趣',
-          '学习独处技能',
-          '发展批判思维',
-          '建立自我价值感'
+          'Cultivate personal interests',
+          'Learn stress management',
+          'Develop self-awareness',
+          'Build individual goals'
+        ]
+      ],
+      'ESTJ': [
+        // Career Development Advice
+        [
+          'Develop strategic leadership',
+          'Learn digital management',
+          'Cultivate innovative thinking',
+          'Build industry influence'
+        ],
+        // Interpersonal Relationship Advice
+        [
+          'Learn emotional care',
+          'Practice patient listening',
+          'Build trust culture',
+          'Develop humanistic care'
+        ],
+        // Personal Growth Advice
+        [
+          'Cultivate work-life balance',
+          'Learn stress management',
+          'Develop emotional intelligence',
+          'Build sustainable development'
+        ]
+      ],
+      'ISFP': [
+        // Career Development Advice
+        [
+          'Develop artistic creation skills',
+          'Learn customer relationship management',
+          'Cultivate craftsmanship',
+          'Build portfolio collection'
+        ],
+        // Interpersonal Relationship Advice
+        [
+          'Learn active expression',
+          'Practice self-advocacy',
+          'Build trust relationships',
+          'Develop communication confidence'
+        ],
+        // Personal Growth Advice
+        [
+          'Cultivate goal setting',
+          'Learn self-promotion',
+          'Develop organizational abilities',
+          'Build growth plans'
+        ]
+      ],
+      'ESFJ': [
+        // Career Development Advice
+        [
+          'Develop human resources skills',
+          'Learn team building',
+          'Cultivate service management',
+          'Build professional certifications'
+        ],
+        // Interpersonal Relationship Advice
+        [
+          'Learn to set boundaries',
+          'Practice accepting criticism',
+          'Build equal relationships',
+          'Develop independence'
+        ],
+        // Personal Growth Advice
+        [
+          'Cultivate critical thinking',
+          'Learn change adaptation',
+          'Develop innovation abilities',
+          'Build personal interests'
         ]
       ],
       'ISTP': [
-        // 职业发展建议
+        // Career Development Advice
         [
-          '发展技术维修技能',
-          '学习工程设计',
-          '培养问题解决',
-          '建立实用专长'
+          'Develop technical repair skills',
+          'Learn engineering design',
+          'Cultivate problem-solving',
+          'Build practical expertise'
         ],
-        // 人际关系建议
+        // Interpersonal Relationship Advice
         [
-          '学会情感分享',
-          '练习主动沟通',
-          '建立深度友谊',
-          '发展团队合作'
+          'Learn emotional sharing',
+          'Practice active communication',
+          'Build deep friendships',
+          'Develop team cooperation'
         ],
-        // 个人成长建议
+        // Personal Growth Advice
         [
-          '培养长期规划',
-          '学习理论学习',
-          '发展表达能力',
-          '建立学习体系'
+          'Cultivate long-term planning',
+          'Learn theoretical learning',
+          'Develop expression abilities',
+          'Build learning systems'
         ]
       ]
     };
 
-    // 默认通用建议
+    // Default general advice
     const defaultAdvice = [
       [
-        '提升核心竞争力',
-        '建立职业网络',
-        '学习行业趋势',
-        '培养领导能力'
+        'Enhance core competitiveness',
+        'Build professional networks',
+        'Learn industry trends',
+        'Cultivate leadership abilities'
       ],
       [
-        '改善沟通技巧',
-        '建立信任关系',
-        '学会情感表达',
-        '发展社交技能'
+        'Improve communication skills',
+        'Build trust relationships',
+        'Learn emotional expression',
+        'Develop social skills'
       ],
       [
-        '制定成长计划',
-        '培养学习能力',
-        '建立反思习惯',
-        '发展多元技能'
+        'Create growth plans',
+        'Cultivate learning abilities',
+        'Build reflection habits',
+        'Develop diverse skills'
       ]
     ];
 
@@ -534,12 +534,12 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
     return typeAdvice[index] || defaultAdvice[index];
   };
 
-  // 格式化文本，添加段落分隔和改善可读性
+  // Format text, add paragraph separation and improve readability
   const formatText = (text: string) => {
-    // 移除开头的标题（如果存在）
+    // Remove title at the beginning (if exists)
     const cleanText = text.replace(/^[^：]*：\s*/, '');
     
-    // 按句号分割，但保留句号
+    // Split by periods but keep the periods
     const sentences = cleanText.split(/([。！？])/);
     let formattedSentences = [];
     
@@ -552,7 +552,7 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
       }
     }
     
-    // 每3-4句为一段
+    // 3-4 sentences per paragraph
     const paragraphs = [];
     for (let i = 0; i < formattedSentences.length; i += 3) {
       const paragraph = formattedSentences.slice(i, i + 3).join('');
@@ -570,99 +570,95 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
         <Card className="border-0 shadow-2xl bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30">
           <CardContent className="p-4 sm:p-8 lg:p-12">
             <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-8">
-              {/* 动画加载器 */}
-            <div className="relative">
+              {/* Loading Animation */}
+              <div className="relative">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 border-4 border-blue-200 rounded-full animate-spin">
                   <div className="absolute top-0 left-0 w-16 h-16 sm:w-20 sm:h-20 border-4 border-transparent border-t-blue-600 rounded-full animate-spin"></div>
                 </div>
-              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center">
                   <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 animate-pulse" />
+                </div>
               </div>
-            </div>
-            
+              
               <div className="text-center space-y-3 sm:space-y-4 px-2">
                 <h3 className="text-lg sm:text-2xl font-bold text-gray-800">{loadingMessage}</h3>
                 <p className="text-sm sm:text-lg text-gray-600">
-                {quickMode ? '预计需要10-15秒' : '预计需要15-30秒'}，请稍候
-              </p>
-                <p className="text-xs sm:text-sm text-gray-500">
-                  正在为您的 <span className="font-semibold text-blue-600">{mbtiType}</span> 类型生成专业解读
+                  {quickMode ? 'Estimated 10-15 seconds' : 'Estimated 15-30 seconds'}, please wait
                 </p>
-            </div>
-            
-            {/* 改进的进度条 */}
+                <p className="text-xs sm:text-sm text-gray-500">
+                  Generating professional interpretation for your <span className="font-semibold text-blue-600">{mbtiType}</span> type
+                </p>
+              </div>
+              
+              {/* Improved Progress Bar */}
               <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg px-2">
                 <div className="flex justify-between text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">
-                  <span className="font-medium">解读进度</span>
+                  <span className="font-medium">Interpretation Progress</span>
                   <span className="font-bold">{Math.round(loadingProgress)}%</span>
-              </div>
+                </div>
                 <div className="w-full bg-gray-200 rounded-full h-3 sm:h-4 overflow-hidden shadow-inner">
-                <div 
+                  <div 
                     className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-3 sm:h-4 rounded-full transition-all duration-700 ease-out relative"
-                  style={{width: `${loadingProgress}%`}}
-                >
+                    style={{width: `${loadingProgress}%`}}
+                  >
                     <div className="absolute inset-0 bg-white bg-opacity-20 animate-pulse"></div>
                     <div className="absolute right-0 top-0 h-full w-6 sm:w-8 bg-gradient-to-l from-white/30 to-transparent"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            {/* 提示信息 */}
+              
+              {/* Tips */}
               <div className="text-center max-w-xs sm:max-w-lg bg-white/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20 mx-2">
                 <div className="flex items-center justify-center mb-2">
                   <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 mr-2" />
-                  <span className="text-xs sm:text-sm font-medium text-gray-700">专业提示</span>
+                  <span className="text-xs sm:text-sm font-medium text-gray-700">Professional Tip</span>
                 </div>
                 <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  我们正在运用先进的AI技术，结合心理学理论为您生成个性化的深度解读报告
-              </p>
+                  We are using advanced AI technology combined with psychological theories to generate a personalized in-depth interpretation report for you
+                </p>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="w-full max-w-4xl mx-auto px-2 sm:px-4">
+      <div className="w-full max-w-6xl mx-auto px-2 sm:px-4">
         <Card className="border-0 shadow-2xl bg-gradient-to-br from-white via-orange-50/30 to-red-50/30">
           <CardContent className="p-4 sm:p-8 lg:p-12">
-            <div className="text-center space-y-4 sm:space-y-8">
-              {/* 友好的图标 */}
+            <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-8">
+              {/* Error Icon */}
               <div className="relative">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center shadow-lg">
-                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center border-4 border-orange-200">
+                  <AlertCircle className="h-8 w-8 sm:h-10 sm:w-10 text-orange-600" />
                 </div>
-                {/* 装饰性光环 */}
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-full blur-xl animate-pulse"></div>
               </div>
               
               <div className="space-y-3 sm:space-y-4 px-2">
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">
-                  解读服务暂时繁忙
+                  Interpretation Service Temporarily Busy
                 </h3>
                 <div className="max-w-xs sm:max-w-lg mx-auto space-y-2 sm:space-y-3">
                   <p className="text-sm sm:text-lg text-gray-600 leading-relaxed">
-                    我们的AI解读服务正在处理大量请求，请稍后再试
+                    Our AI interpretation service is processing a large number of requests, please try again later
                   </p>
                   <p className="text-xs sm:text-sm text-gray-500">
-                    通常几分钟后就会恢复正常，感谢您的耐心等待
+                    Usually returns to normal within a few minutes, thank you for your patience
                   </p>
                   {retryCount > 0 && (
                     <p className="text-xs text-amber-600 bg-amber-50 px-2 sm:px-3 py-1 sm:py-2 rounded-lg border border-amber-200">
-                      已重试 {retryCount} 次 {retryCount >= 3 ? '• 建议稍后再试' : ''}
+                      Retried {retryCount} times {retryCount >= 3 ? '• Suggest trying again later' : ''}
                     </p>
                   )}
                 </div>
               </div>
               
-              {/* 重试选项 */}
+              {/* Retry Options */}
               <div className="space-y-3 sm:space-y-4 px-2">
-            <Button 
+                <Button 
                   onClick={() => generateInterpretation(true)}
                   disabled={retryCount >= 5}
                   className={`${
@@ -670,10 +666,10 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                       ? 'bg-gray-400 cursor-not-allowed' 
                       : 'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600'
                   } text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:transform-none disabled:shadow-lg text-sm sm:text-base`}
-            >
+                >
                   <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
-                  {retryCount >= 5 ? '已达重试上限' : '立即重试'}
-            </Button>
+                  {retryCount >= 5 ? 'Retry Limit Reached' : 'Retry Now'}
+                </Button>
                 
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
                   <button
@@ -681,7 +677,7 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                     className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md"
                   >
                     <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                    重新选择类型
+                    Reselect Type
                   </button>
                   
                   <button
@@ -689,43 +685,43 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                     className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md"
                   >
                     <Users className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                    稍后重试
+                    Try Again Later
                   </button>
                 </div>
               </div>
               
-              {/* 友好提示 */}
+              {/* Friendly Tips */}
               <div className="bg-white/60 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20 max-w-xs sm:max-w-md mx-auto">
                 <div className="flex items-center justify-center mb-2 sm:mb-3">
                   <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 mr-2" />
                   <span className="text-xs sm:text-sm font-medium text-gray-700">
-                    {retryCount >= 3 ? '温馨建议' : '小贴士'}
+                    {retryCount >= 3 ? 'Friendly Suggestion' : 'Tips'}
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   {retryCount >= 3 
-                    ? '多次重试未成功，建议您稍后再来体验。我们的技术团队正在优化服务，为您提供更稳定的解读体验。'
+                    ? 'Multiple retries unsuccessful, suggest you try again later. Our technical team is optimizing the service to provide you with a more stable interpretation experience.'
                     : retryCount >= 1
-                    ? '如果重试仍然失败，可能是当前访问量较大。建议等待几分钟后再试，或检查网络连接。'
-                    : '如果问题持续存在，可能是网络连接不稳定。建议检查网络后重试，或稍后再来体验我们的专业解读服务。'
+                    ? 'If retry still fails, it may be due to high current traffic. Suggest waiting a few minutes before trying again, or check network connection.'
+                    : 'If the problem persists, it may be due to unstable network connection. Suggest checking the network and retrying, or come back later to experience our professional interpretation service.'
                   }
                 </p>
               </div>
               
-              {/* 调试信息（仅在开发环境显示） */}
+              {/* Debug Info (only shown in development environment) */}
               {process.env.NODE_ENV === 'development' && (
                 <details className="text-left max-w-xs sm:max-w-lg mx-auto px-2">
                   <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">
-                    开发调试信息（点击展开）
+                    Development Debug Info (click to expand)
                   </summary>
                   <div className="mt-2 p-2 sm:p-3 bg-gray-100 rounded-lg text-xs text-gray-600 font-mono break-all">
                     {error}
                   </div>
                 </details>
               )}
-          </div>
-        </CardContent>
-      </Card>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -737,75 +733,75 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
           <CardContent className="p-4 sm:p-8">
             <div className="text-center space-y-4">
               <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-gray-400" />
-              <p className="text-base sm:text-lg text-gray-600">暂无解读内容</p>
-            <Button 
+              <p className="text-base sm:text-lg text-gray-600">No interpretation content available</p>
+              <Button 
                 onClick={() => generateInterpretation()}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base"
-            >
-                开始生成解读
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+              >
+                Start Generating Interpretation
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-8 px-2 sm:px-3 lg:px-8">
-      {/* 返回选择按钮 */}
+      {/* Return Selection Button */}
       <div className="flex justify-center px-1">
         <button
           onClick={() => window.location.reload()}
           className="group inline-flex items-center px-3 sm:px-4 lg:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md"
         >
           <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
-          重新选择MBTI类型
+          Reselect MBTI Type
         </button>
       </div>
 
-      {/* 标题区域 */}
+      {/* Title Area */}
       <div className="text-center space-y-4 sm:space-y-6 px-1">
         <div className="relative">
-          {/* 背景装饰 */}
+          {/* Background Decoration */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 rounded-2xl sm:rounded-3xl blur-3xl"></div>
           
           <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 xl:p-12 border border-white/20 shadow-2xl">
-            {/* MBTI类型徽章 */}
+            {/* MBTI Type Badge */}
             <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 lg:mb-6 shadow-lg">
               <span className="text-base sm:text-xl lg:text-2xl font-bold text-white">{mbtiType}</span>
             </div>
             
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent px-1">
-              {mbtiType} 性格类型解读报告
+              {mbtiType} Personality Type Interpretation Report
             </h1>
             
             <div className="inline-flex items-center px-2 sm:px-3 lg:px-4 py-1 sm:py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-3 sm:mb-4 lg:mb-6">
               <span className="text-xs sm:text-sm font-medium text-gray-700">
-                {quickMode ? '🚀 快速模式' : '🎯 专业深度模式'}
+                {quickMode ? '🚀 Quick Mode' : '🎯 Professional In-Depth Mode'}
               </span>
             </div>
             
             <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-4 sm:mb-6 lg:mb-8 px-1">
-          {quickMode 
-                ? '基于MBTI理论的快速性格洞察，为您提供核心建议和发展方向' 
-                : '基于心理学理论和AI深度分析，为您呈现全面的性格洞察和专业发展建议'
-          }
-        </p>
+              {quickMode 
+                ? 'Quick personality insights based on MBTI theory, providing core advice and development directions' 
+                : 'Based on psychological theory and AI deep analysis, presenting comprehensive personality insights and professional development advice'
+              }
+            </p>
             
-          <Button 
+            <Button 
               onClick={() => generateInterpretation()}
-            variant="outline"
+              variant="outline"
               className="border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-50 text-blue-700 font-medium px-4 sm:px-6 py-3 rounded-xl transition-all duration-200"
-          >
+            >
               <RefreshCw className="w-4 h-4 mr-2" />
-            重新生成解读
-          </Button>
+              Regenerate Interpretation
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* 解读内容 */}
+      {/* Interpretation Content */}
       <div className="space-y-4 sm:space-y-8 lg:space-y-12">
         {interpretation.map((content, index) => {
           const section = sectionTitles[index];
@@ -814,96 +810,74 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
           
           return (
             <div key={index} className="relative px-1">
-              {/* 背景装饰 */}
+              {/* Background Decoration */}
               <div className={`absolute inset-0 bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} opacity-5 rounded-2xl sm:rounded-3xl blur-2xl`}></div>
               
               <Card className={`relative border-0 shadow-2xl bg-white/90 backdrop-blur-sm hover:shadow-3xl transition-all duration-500 rounded-xl sm:rounded-2xl lg:rounded-3xl overflow-hidden`}>
-                {/* 顶部装饰条 */}
+                {/* Top Decoration Bar */}
                 <div className={`h-1 sm:h-2 bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'}`}></div>
                 
                 <CardHeader className="pb-3 sm:pb-4 lg:pb-6 pt-4 sm:pt-6 lg:pt-8 px-3 sm:px-4 lg:px-6 xl:px-8">
                   <div className="flex items-start gap-2 sm:gap-3 lg:gap-6">
-                    {/* 图标区域 */}
+                    {/* Icon Area */}
                     <div className={`flex-shrink-0 p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl lg:rounded-2xl ${section?.bgColor || 'bg-gray-50'} ${section?.borderColor || 'border-gray-200'} border border-2 shadow-lg`}>
                       <Icon className={`h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 ${section?.color || 'text-gray-600'}`} />
-                  </div>
+                    </div>
                     
-                    {/* 标题区域 */}
+                    {/* Title Area */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                        <span className={`inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 rounded-full bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} text-white text-xs sm:text-sm lg:text-base font-bold flex-shrink-0`}>
-                          {index + 1}
-                  </span>
-                        <h2 className="text-base sm:text-lg lg:text-2xl xl:text-3xl font-bold text-gray-900 leading-tight">
-                          {section?.title || `第 ${index + 1} 部分`}
-                        </h2>
-                      </div>
-                      {section?.description && (
-                        <p className="text-gray-600 text-xs sm:text-sm lg:text-base xl:text-lg leading-relaxed">
-                          {section.description}
-                        </p>
-                      )}
+                      <h2 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
+                        {section?.title || `Section ${index + 1}`}
+                      </h2>
+                      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                        {section?.description || 'Professional personality analysis content'}
+                      </p>
                     </div>
                   </div>
-              </CardHeader>
+                </CardHeader>
                 
                 <CardContent className="px-3 sm:px-4 lg:px-6 xl:px-8 pb-4 sm:pb-6 lg:pb-8">
-                  {/* 主要内容 */}
+                  {/* Main Content */}
                   <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-                  {paragraphs.map((paragraph, pIndex) => (
-                    <div key={pIndex} className="relative">
+                    {paragraphs.map((paragraph, pIndex) => (
+                      <div key={pIndex} className="relative">
                         <div className="prose prose-sm sm:prose-base lg:prose-lg max-w-none">
                           <p className="text-gray-800 leading-relaxed text-justify text-xs sm:text-sm lg:text-base xl:text-lg font-normal tracking-wide">
-                        {paragraph}
-                      </p>
+                            {paragraph}
+                          </p>
                         </div>
-                      {pIndex < paragraphs.length - 1 && (
+                        {pIndex < paragraphs.length - 1 && (
                           <div className="mt-3 sm:mt-4 lg:mt-6 flex justify-center">
                             <div className="w-12 sm:w-16 lg:w-24 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
                           </div>
-                      )}
-                    </div>
-                  ))}
-                  
-                    {/* 实用建议区域 */}
-                    <div className="mt-6 sm:mt-8 lg:mt-10 pt-4 sm:pt-6 lg:pt-8 border-t border-gray-200">
-                      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 lg:mb-6">
-                        <div className="p-1.5 sm:p-2 bg-amber-100 rounded-lg flex-shrink-0">
-                          <Target className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 text-amber-600" />
-                        </div>
-                        <h3 className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold text-gray-900">
-                          实用建议与行动指南
-                        </h3>
-                    </div>
-                      
-                      <div className="grid grid-cols-1 gap-2 sm:gap-3 lg:gap-4">
-                      {getSectionAdvice(index, mbtiType).map((advice, adviceIndex) => (
-                        <div
-                          key={adviceIndex}
-                            className={`group relative overflow-hidden rounded-lg sm:rounded-xl p-2.5 sm:p-3 lg:p-4 bg-gradient-to-br ${section?.bgColor || 'bg-gray-50'} border ${section?.borderColor || 'border-gray-200'} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}
-                        >
-                            <div className="flex items-center gap-2 sm:gap-3">
-                              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} flex-shrink-0`}></div>
-                              <span className="text-xs sm:text-sm lg:text-base font-medium text-gray-800 group-hover:text-gray-900 transition-colors leading-relaxed">
-                          {advice}
-                              </span>
-                            </div>
-                            
-                            {/* 悬停效果 */}
-                            <div className={`absolute inset-0 bg-gradient-to-r ${section?.gradientFrom || 'from-gray-500'} ${section?.gradientTo || 'to-gray-600'} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
-                        </div>
-                      ))}
+                        )}
+                      </div>
+                    ))}
+                    
+                    {/* Practical Advice Area */}
+                    <div className="mt-6 sm:mt-8 lg:mt-10 p-3 sm:p-4 lg:p-6 bg-gradient-to-r from-gray-50 to-white rounded-lg sm:rounded-xl lg:rounded-2xl border border-gray-200 shadow-sm">
+                      <div className="flex items-center mb-3 sm:mb-4">
+                        <Target className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 mr-2" />
+                        <h4 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-800">Key Actionable Advice</h4>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                        {getSectionAdvice(index, mbtiType).map((advice: string, adviceIndex: number) => (
+                          <div key={adviceIndex} className="flex items-center text-xs sm:text-sm text-gray-700 bg-white/60 rounded-lg p-2 sm:p-3 shadow-sm">
+                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full mr-2 sm:mr-3 flex-shrink-0"></div>
+                            <span className="leading-relaxed">{advice}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
             </div>
           );
         })}
       </div>
 
-      {/* 底部总结卡片 */}
+      {/* Professional Summary */}
       <Card className="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 border-0 shadow-2xl rounded-xl sm:rounded-2xl lg:rounded-3xl overflow-hidden mx-1">
         <div className="h-1 sm:h-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"></div>
         <CardContent className="p-3 sm:p-4 lg:p-8 xl:p-12">
@@ -913,23 +887,23 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
                 <BookOpen className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-blue-600" />
               </div>
               <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">
-                专业解读总结
+                Professional Interpretation Summary
               </h3>
             </div>
             
             <div className="max-w-4xl mx-auto px-1">
               <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-700 leading-relaxed mb-4 sm:mb-6 lg:mb-8">
-                以上解读基于<span className="font-semibold text-blue-600">MBTI理论框架</span>和<span className="font-semibold text-purple-600">现代心理学研究</span>，
-                结合<span className="font-semibold text-pink-600">AI深度分析技术</span>，为您提供个性化的成长指导。
-                请将这些洞察与实际生活相结合，制定属于您的发展蓝图。
-            </p>
+                The above interpretation is based on <span className="font-semibold text-blue-600">MBTI theoretical framework</span> and <span className="font-semibold text-purple-600">modern psychological research</span>,
+                combined with <span className="font-semibold text-pink-600">AI deep analysis technology</span>, providing personalized growth guidance for you.
+                Please integrate these insights with real life to create your own development blueprint.
+              </p>
               
               <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-6 lg:mb-8">
                 {[
-                  { icon: '🎯', label: '目标导向', color: 'from-blue-500 to-blue-600' },
-                  { icon: '🌱', label: '持续成长', color: 'from-green-500 to-emerald-600' },
-                  { icon: '🤝', label: '和谐关系', color: 'from-pink-500 to-rose-600' },
-                  { icon: '💡', label: '自我觉察', color: 'from-purple-500 to-violet-600' }
+                  { icon: '🎯', label: 'Goal-Oriented', color: 'from-blue-500 to-blue-600' },
+                  { icon: '🌱', label: 'Continuous Growth', color: 'from-green-500 to-emerald-600' },
+                  { icon: '🤝', label: 'Harmonious Relations', color: 'from-pink-500 to-rose-600' },
+                  { icon: '💡', label: 'Self-Awareness', color: 'from-purple-500 to-violet-600' }
                 ].map((item, index) => (
                   <div key={index} className="group">
                     <div className={`bg-gradient-to-br ${item.color} rounded-lg sm:rounded-xl lg:rounded-2xl p-2 sm:p-3 lg:p-4 text-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1`}>
@@ -942,7 +916,7 @@ const MbtiInterpretation: React.FC<MbtiInterpretationProps> = ({ mbtiType, quick
               
               <div className="bg-white/60 backdrop-blur-sm rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 border border-white/20">
                 <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  💫 <strong>温馨提示：</strong>性格类型是了解自己的工具，而非限制。真正的成长来自于持续的自我探索、学习实践和勇于突破舒适圈的勇气。
+                  💫 <strong>Warm Reminder:</strong> Personality type is a tool for understanding yourself, not a limitation. True growth comes from continuous self-exploration, learning practice, and the courage to break out of your comfort zone.
                 </p>
               </div>
             </div>

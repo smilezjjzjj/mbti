@@ -1,63 +1,65 @@
 # MBTI-App.Online
 
-一个基于 Next.js 13 App Router 开发的在线 MBTI 性格测试解读平台。使用 TypeScript、Tailwind CSS、Shadcn UI 构建，提供美观的界面和流畅的用户体验。
+An online MBTI personality test interpretation platform built with Next.js 13 App Router. Developed using TypeScript, Tailwind CSS, and Shadcn UI, providing a beautiful interface and smooth user experience.
 
-## 项目简介
+## Project Overview
 
-MBTI-App.Online 是一个专业的 MBTI 性格类型解读平台，帮助用户深入了解自己的性格特点，提供个性化的职业发展、人际关系和个人成长建议。
+MBTI-App.Online is a professional MBTI personality type interpretation platform that helps users gain deep insights into their personality traits, providing personalized career development, interpersonal relationship, and personal growth recommendations.
 
-## 主要功能
+## Key Features
 
-- MBTI 性格类型解读
-- AI 驱动的个性化分析
-- 实时评论与讨论
-- 响应式设计
-- 自动部署集成
+- MBTI personality type interpretation
+- AI-powered personalized analysis
+- Real-time comments and discussions
+- Responsive design
+- Automated deployment integration
 
-## 技术栈
+## Tech Stack
 
 - Next.js 13 (App Router)
 - TypeScript
 - Tailwind CSS
 - Shadcn UI
 - React Server Components
-- Vercel 自动部署
+- Vercel automatic deployment
 
-## 部署
+## Deployment
 
-本项目已配置 Vercel 自动部署：
-- 推送到 `main` 分支会自动触发生产环境部署
-- 推送到其他分支会创建预览部署
-- 部署状态可在 Vercel Dashboard 中查看
+This project is configured with Vercel automatic deployment:
+- Pushing to the `main` branch automatically triggers production deployment
+- Pushing to other branches creates preview deployments
+- Deployment status can be viewed in the Vercel Dashboard
 
-## 本地开发
+## Local Development
 
 ```bash
-# 安装依赖
+# Install dependencies
 npm install
 
-# 启动开发服务器
+# Start development server
 npm run dev
 
-# 构建生产版本
+# Build production version
 npm run build
 
-# 启动生产服务器
+# Start production server
 npm run start
 ```
 
-## 环境变量
+## Environment Variables
 
-创建 `.env.local` 文件并设置以下环境变量：
+Create a `.env.local` file and set the following environment variables:
 
 ```env
 NEXT_PUBLIC_DEEPSEEK_API_KEY=your_api_key
 ```
 
-## 许可证
+## License
 
-MIT # API 配置更新 - 2025年 6月 2日 星期一 18时29分46秒 CST
-# 触发重新部署 - 2025年 6月 2日 星期一 18时57分57秒 CST
-# 强制重新部署 API 修复 - 2025年 6月 2日 星期一 19时01分07秒 CST
+MIT 
 
-# 强制部署更新 - 2025年 6月14日 星期六 14时59分47秒 CST
+# API Configuration Update - Monday, June 2, 2025 6:29:46 PM CST
+# Trigger Redeployment - Monday, June 2, 2025 6:57:57 PM CST  
+# Force Redeploy API Fix - Monday, June 2, 2025 7:01:07 PM CST
+
+# Force Deployment Update - Saturday, June 14, 2025 2:59:47 PM CST

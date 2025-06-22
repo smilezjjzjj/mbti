@@ -23,11 +23,11 @@ export function getInterpretationByMbtiType(mbtiType: string): Interpretation | 
       try {
         const interpretation: Interpretation = JSON.parse(interpretationString);
         
-        // 检查是否是同一个MBTI类型且缓存未过期（24小时）
+        // Check if it's the same MBTI type and cache hasn't expired (24 hours)
         if (interpretation.mbtiType === mbtiType) {
           const now = Date.now();
           const cacheAge = now - interpretation.timestamp;
-          const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24小时
+          const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
           
           if (cacheAge <= CACHE_EXPIRY) {
             return interpretation;
@@ -47,7 +47,7 @@ export function saveInterpretation(interpretation: Interpretation): void {
   }
 }
 
-// 评论相关功能
+// Comment-related functions
 export function getComments(mbtiType?: string): Comment[] {
   if (typeof window !== 'undefined') {
     const commentsString = localStorage.getItem(LOCAL_STORAGE_KEYS.comments);
@@ -97,12 +97,12 @@ export function likeComment(commentId: string): void {
   }
 }
 
-// 昵称相关功能
+// Nickname-related functions
 export function getUserNickname(): string | null {
   if (typeof window !== 'undefined') {
     const nickname = localStorage.getItem(LOCAL_STORAGE_KEYS.lastUsername);
     
-    // 检查是否是旧的自动生成昵称格式（如"灵感的猫986"），如果是则清除
+    // Check if it's the old auto-generated nickname format (e.g., "Inspiring Cat986"), if so, clear it
     if (nickname && /^.+的.+\d+$/.test(nickname)) {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.lastUsername);
       return null;

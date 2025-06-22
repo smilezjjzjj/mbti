@@ -6,75 +6,75 @@ export default function Footer() {
     <footer className="glass-effect border-t border-white/20 mt-auto">
       <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          {/* 品牌信息 */}
+          {/* Brand Information */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">M</span>
               </div>
               <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                MBTI性格解读
+                MBTI Interpretation
               </span>
             </div>
             <p className="text-gray-600 text-sm leading-relaxed mb-4">
-              基于AI技术的专业MBTI性格分析平台，帮助您深入了解自己的性格特质，
-              发现内在潜能，实现个人成长和职业发展。
+              A professional AI-powered MBTI personality analysis platform that helps you deeply understand your personality traits, 
+              discover your inner potential, and achieve personal growth and career development.
             </p>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <Heart className="h-4 w-4 text-red-500" />
-              <span>用心服务，成就更好的自己</span>
+              <span>Serving with care, achieving a better you</span>
             </div>
           </div>
           
-          {/* 快速链接 */}
+          {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">快速链接</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
-                  首页
+                  Home
                 </Link>
               </li>
               <li>
                 <Link href="/about" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
-                  关于MBTI
+                  About MBTI
                 </Link>
               </li>
               <li>
                 <Link href="/about-us" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
-                  关于我们
+                  About Us
                 </Link>
               </li>
               <li>
                 <Link href="/faq" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
-                  常见问题
+                  FAQ
                 </Link>
               </li>
               <li>
                 <a 
-                  href="https://www.16personalities.com/ch" 
+                  href="https://www.16personalities.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-sm text-gray-600 hover:text-purple-600 transition-colors"
                 >
-                  性格测试
+                  Personality Test
                 </a>
               </li>
             </ul>
           </div>
           
-          {/* 法律信息 */}
+          {/* Legal Information */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">法律信息</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Legal</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/privacy" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
-                  隐私政策
+                  Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
-                  服务条款
+                  Terms of Service
                 </Link>
               </li>
               <li>
@@ -82,29 +82,29 @@ export default function Footer() {
                   href="mailto:smilezjjzjj@126.com"
                   className="text-sm text-gray-600 hover:text-purple-600 transition-colors"
                 >
-                  联系我们
+                  Contact Us
                 </a>
               </li>
             </ul>
           </div>
         </div>
         
-        {/* 分割线 */}
+        {/* Divider */}
         <div className="border-t border-gray-200 pt-6">
           <div className="flex flex-col sm:flex-row justify-between items-center">
-            {/* 版权信息 */}
+            {/* Copyright */}
             <div className="flex items-center space-x-2 mb-4 sm:mb-0">
               <span className="text-sm text-gray-500">
-                © 2025 MBTI性格解读平台. 保留所有权利.
+                © 2025 MBTI Interpretation Platform. All rights reserved.
               </span>
             </div>
             
-            {/* 联系方式 */}
+            {/* Contact Information */}
             <div className="flex items-center space-x-4">
               <a 
                 href="mailto:smilezjjzjj@126.com"
                 className="text-gray-500 hover:text-purple-600 transition-colors"
-                title="邮箱联系"
+                title="Email Contact"
               >
                 <Mail className="h-4 w-4" />
               </a>
@@ -113,25 +113,25 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-purple-600 transition-colors"
-                title="GitHub仓库"
+                title="GitHub Repository"
               >
                 <Github className="h-4 w-4" />
               </a>
-              <div className="text-gray-500" title="网站域名">
+              <div className="text-gray-500" title="Website Domain">
                 <Globe className="h-4 w-4" />
               </div>
             </div>
           </div>
           
-          {/* 技术信息 */}
+          {/* Technical Information */}
           <div className="mt-4 pt-4 border-t border-gray-100">
             <div className="text-center">
               <p className="text-xs text-gray-400">
-                基于 Next.js + TypeScript + AI 技术构建 | 
+                Built with Next.js + TypeScript + AI Technology | 
                 <span className="mx-1">•</span>
-                部署于 Vercel 云平台 | 
+                Deployed on Vercel Platform | 
                 <span className="mx-1">•</span>
-                AI 分析由 DeepSeek 提供支持
+                AI Analysis Powered by DeepSeek
               </p>
             </div>
           </div>

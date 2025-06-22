@@ -1,32 +1,32 @@
 export const AppleTheme = {
   colors: {
-    // 主色调 - 苹果蓝
+    // Primary color - Apple blue
     primary: '#0071E3',
     primaryHover: '#0077ED',
     primaryActive: '#0068D1',
     
-    // 背景色
+    // Background colors
     background: '#FFFFFF',
     backgroundSecondary: '#F5F5F7',
     cardBackground: '#FFFFFF',
     
-    // 文字颜色
+    // Text colors
     text: '#1D1D1F',
     textSecondary: '#86868B',
     textTertiary: '#6E6E73',
     textLight: '#FAFAFA',
     
-    // 边框和分割线
+    // Borders and dividers
     border: '#D2D2D7',
     borderLight: '#E8E8ED',
     
-    // 状态颜色
+    // Status colors
     success: '#34C759',
     warning: '#FF9500',
     error: '#FF3B30',
     info: '#007AFF',
     
-    // 苹果产品色彩
+    // Apple product colors
     blue: '#0071E3',
     green: '#34C759',
     indigo: '#5E5CE6',

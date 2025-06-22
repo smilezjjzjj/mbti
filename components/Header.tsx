@@ -25,7 +25,7 @@ export default function Header() {
               <span className="text-white font-bold text-sm sm:text-xl">M</span>
             </div>
             <span className="text-sm sm:text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent whitespace-nowrap">
-              <span className="hidden sm:inline">MBTI性格解读</span>
+              <span className="hidden sm:inline">MBTI Interpretation</span>
               <span className="sm:hidden">MBTI</span>
             </span>
           </Link>
@@ -36,20 +36,20 @@ export default function Header() {
               href="/about" 
               className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-base whitespace-nowrap"
             >
-              关于MBTI
+              About MBTI
             </Link>
             <Link 
               href="/about-us" 
               className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-base whitespace-nowrap"
             >
-              关于我们
+              About Us
             </Link>
             <a 
               href="mailto:smilezjjzjj@126.com"
               className="flex items-center space-x-1 text-gray-700 hover:text-purple-600 transition-colors font-medium text-base whitespace-nowrap"
             >
               <EnvelopeClosedIcon className="h-4 w-4 flex-shrink-0" />
-              <span>联系我们</span>
+              <span>Contact Us</span>
             </a>
           </nav>
 
@@ -59,29 +59,29 @@ export default function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                   <HamburgerMenuIcon className="h-4 w-4" />
-                  <span className="sr-only">打开菜单</span>
+                  <span className="sr-only">Open menu</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem asChild>
                   <Link href="/about" className="w-full">
-                    关于MBTI
+                    About MBTI
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/about-us" className="w-full">
-                    关于我们
+                    About Us
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/privacy" className="w-full">
-                    隐私政策
+                    Privacy Policy
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/terms" className="w-full">
-                    服务条款
+                    Terms of Service
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -89,7 +89,7 @@ export default function Header() {
                   <a href="mailto:smilezjjzjj@126.com" className="w-full">
                     <div className="flex items-center">
                       <EnvelopeClosedIcon className="h-4 w-4 mr-2" />
-                      联系我们
+                      Contact Us
                     </div>
                   </a>
                 </DropdownMenuItem>

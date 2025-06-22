@@ -37,10 +37,10 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
     <Card className="modern-card border-0 shadow-none">
       <CardHeader className="text-center pb-4 sm:pb-6">
         <CardTitle className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-          MBTI性格解读
+          MBTI Personality Interpretation
         </CardTitle>
         <CardDescription className="text-gray-600 text-sm sm:text-base px-2">
-          选择或输入你的MBTI类型，获得AI驱动的深度性格分析
+          Select or enter your MBTI type to get AI-powered in-depth personality analysis
         </CardDescription>
       </CardHeader>
       
@@ -48,10 +48,10 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <div className="space-y-3">
             <Label htmlFor="mbti-input" className="text-sm font-medium text-gray-700">
-              选择或输入你的MBTI类型
+              Select or enter your MBTI type
             </Label>
             
-            {/* MBTI类型选择网格 - 移动端2列，桌面端4列 */}
+            {/* MBTI Type Selection Grid - 2 columns on mobile, 4 columns on desktop */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4">
               {MBTI_TYPES.map((type) => (
                 <button
@@ -69,7 +69,7 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
               ))}
             </div>
             
-            {/* 手动输入框 */}
+            {/* Manual Input Field */}
             <div className="relative">
               <Input
                 id="mbti-input"
@@ -79,13 +79,13 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
                   setMbtiType(e.target.value);
                   setSelectedType('');
                 }}
-                placeholder="或手动输入 (如: INTJ)"
+                placeholder="Or enter manually (e.g., INTJ)"
                 className="glass-effect border-white/30 focus:border-purple-400 focus:ring-purple-400 text-center font-medium text-base sm:text-lg tracking-wider h-12 sm:h-auto"
                 maxLength={4}
               />
             </div>
 
-            {/* 快速模式选项 */}
+            {/* Quick Mode Option */}
             <div className="flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
               <input
                 type="checkbox"
@@ -95,8 +95,8 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
               />
               <label htmlFor="quick-mode" className="text-sm text-gray-700 cursor-pointer">
-                <span className="font-medium">快速模式</span>
-                <span className="text-gray-500 ml-1">(10-15秒，简化版解读)</span>
+                <span className="font-medium">Quick Mode</span>
+                <span className="text-gray-500 ml-1">(10-15 seconds, simplified interpretation)</span>
               </label>
             </div>
           </div>
@@ -109,10 +109,10 @@ export default function MbtiForm({ onSubmit, isLoading }: MbtiFormProps) {
             {isLoading ? (
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>{quickMode ? '快速生成中...' : 'AI正在分析中...'}</span>
+                <span>{quickMode ? 'Quick Generating...' : 'AI Analyzing...'}</span>
               </div>
             ) : (
-              quickMode ? '快速AI解读' : '开始AI解读'
+              quickMode ? 'Quick AI Interpretation' : 'Start AI Interpretation'
             )}
           </Button>
         </form>
